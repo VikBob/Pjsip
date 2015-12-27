@@ -1,0 +1,606 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1BB249551ADCBC00006BE66F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BB249541ADCBC00006BE66F /* AVFoundation.framework */; };
+		1BB249571ADCBC11006BE66F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BB249561ADCBC11006BE66F /* AudioToolbox.framework */; };
+		1BB249591ADCBC1D006BE66F /* libz.1.1.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BB249581ADCBC1D006BE66F /* libz.1.1.3.dylib */; };
+		393F21E11B12CD3800608F44 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393F21E01B12CD3800608F44 /* CoreGraphics.framework */; };
+		393F21E31B12CD4000608F44 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393F21E21B12CD4000608F44 /* UIKit.framework */; };
+		393F21E51B12CD4B00608F44 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393F21E41B12CD4B00608F44 /* Foundation.framework */; };
+		3983A94A1C2FC57E00DE929A /* libg7221codec-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A9371C2FC57E00DE929A /* libg7221codec-arm-apple-darwin9.a */; };
+		3983A94B1C2FC57E00DE929A /* libgsmcodec-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A9381C2FC57E00DE929A /* libgsmcodec-arm-apple-darwin9.a */; };
+		3983A94C1C2FC57E00DE929A /* libilbccodec-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A9391C2FC57E00DE929A /* libilbccodec-arm-apple-darwin9.a */; };
+		3983A94D1C2FC57E00DE929A /* libpj-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A93A1C2FC57E00DE929A /* libpj-arm-apple-darwin9.a */; };
+		3983A94E1C2FC57E00DE929A /* libpjlib-util-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A93B1C2FC57E00DE929A /* libpjlib-util-arm-apple-darwin9.a */; };
+		3983A94F1C2FC57E00DE929A /* libpjmedia-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A93C1C2FC57E00DE929A /* libpjmedia-arm-apple-darwin9.a */; };
+		3983A9501C2FC57E00DE929A /* libpjmedia-audiodev-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A93D1C2FC57E00DE929A /* libpjmedia-audiodev-arm-apple-darwin9.a */; };
+		3983A9511C2FC57E00DE929A /* libpjmedia-codec-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A93E1C2FC57E00DE929A /* libpjmedia-codec-arm-apple-darwin9.a */; };
+		3983A9521C2FC57E00DE929A /* libpjmedia-videodev-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A93F1C2FC57E00DE929A /* libpjmedia-videodev-arm-apple-darwin9.a */; };
+		3983A9531C2FC57E00DE929A /* libpjnath-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A9401C2FC57E00DE929A /* libpjnath-arm-apple-darwin9.a */; };
+		3983A9541C2FC57E00DE929A /* libpjsdp-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A9411C2FC57E00DE929A /* libpjsdp-arm-apple-darwin9.a */; };
+		3983A9551C2FC57E00DE929A /* libpjsip-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A9421C2FC57E00DE929A /* libpjsip-arm-apple-darwin9.a */; };
+		3983A9561C2FC57E00DE929A /* libpjsip-simple-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A9431C2FC57E00DE929A /* libpjsip-simple-arm-apple-darwin9.a */; };
+		3983A9571C2FC57E00DE929A /* libpjsip-ua-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A9441C2FC57E00DE929A /* libpjsip-ua-arm-apple-darwin9.a */; };
+		3983A9581C2FC57E00DE929A /* libpjsua-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A9451C2FC57E00DE929A /* libpjsua-arm-apple-darwin9.a */; };
+		3983A9591C2FC57E00DE929A /* libpjsua2-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A9461C2FC57E00DE929A /* libpjsua2-arm-apple-darwin9.a */; };
+		3983A95A1C2FC57E00DE929A /* libresample-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A9471C2FC57E00DE929A /* libresample-arm-apple-darwin9.a */; };
+		3983A95B1C2FC57E00DE929A /* libspeex-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A9481C2FC57E00DE929A /* libspeex-arm-apple-darwin9.a */; };
+		3983A95C1C2FC57E00DE929A /* libsrtp-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3983A9491C2FC57E00DE929A /* libsrtp-arm-apple-darwin9.a */; };
+		39C35F201B0B3F1E009ACDF5 /* phone.caf in Resources */ = {isa = PBXBuildFile; fileRef = 39C35F1F1B0B3F1E009ACDF5 /* phone.caf */; };
+		39D219EC1B05A191006EB7C2 /* MZTimerLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 39D219EB1B05A191006EB7C2 /* MZTimerLabel.m */; };
+		39DB2F981B09B79400E630BC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 39DB2F951B09B79400E630BC /* Default-568h@2x.png */; };
+		39DB2F991B09B79400E630BC /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 39DB2F961B09B79400E630BC /* Default.png */; };
+		39DB2F9A1B09B79400E630BC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 39DB2F971B09B79400E630BC /* Default@2x.png */; };
+		DFE5F6591ADBC91500CA8209 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DFE5F6581ADBC91500CA8209 /* main.m */; };
+		DFE5F65C1ADBC91500CA8209 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DFE5F65B1ADBC91500CA8209 /* AppDelegate.m */; };
+		DFE5F65F1ADBC91500CA8209 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFE5F65E1ADBC91500CA8209 /* ViewController.m */; };
+		DFE5F6621ADBC91500CA8209 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DFE5F6601ADBC91500CA8209 /* Main.storyboard */; };
+		DFE5F6641ADBC91500CA8209 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DFE5F6631ADBC91500CA8209 /* Images.xcassets */; };
+		DFE5F6671ADBC91500CA8209 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = DFE5F6651ADBC91500CA8209 /* LaunchScreen.xib */; };
+		DFE5F6731ADBC91500CA8209 /* sipTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFE5F6721ADBC91500CA8209 /* sipTests.m */; };
+		DFE5F6A91ADBCEB400CA8209 /* Pjsip.m in Sources */ = {isa = PBXBuildFile; fileRef = DFE5F6A81ADBCEB400CA8209 /* Pjsip.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DFE5F66D1ADBC91500CA8209 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DFE5F64B1ADBC91500CA8209 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DFE5F6521ADBC91500CA8209;
+			remoteInfo = sip;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1BB249541ADCBC00006BE66F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		1BB249561ADCBC11006BE66F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		1BB249581ADCBC1D006BE66F /* libz.1.1.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.1.3.dylib; path = usr/lib/libz.1.1.3.dylib; sourceTree = SDKROOT; };
+		393F21E01B12CD3800608F44 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		393F21E21B12CD4000608F44 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		393F21E41B12CD4B00608F44 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		3983A9371C2FC57E00DE929A /* libg7221codec-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libg7221codec-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A9381C2FC57E00DE929A /* libgsmcodec-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libgsmcodec-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A9391C2FC57E00DE929A /* libilbccodec-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libilbccodec-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A93A1C2FC57E00DE929A /* libpj-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libpj-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A93B1C2FC57E00DE929A /* libpjlib-util-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libpjlib-util-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A93C1C2FC57E00DE929A /* libpjmedia-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libpjmedia-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A93D1C2FC57E00DE929A /* libpjmedia-audiodev-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libpjmedia-audiodev-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A93E1C2FC57E00DE929A /* libpjmedia-codec-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libpjmedia-codec-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A93F1C2FC57E00DE929A /* libpjmedia-videodev-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libpjmedia-videodev-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A9401C2FC57E00DE929A /* libpjnath-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libpjnath-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A9411C2FC57E00DE929A /* libpjsdp-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libpjsdp-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A9421C2FC57E00DE929A /* libpjsip-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libpjsip-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A9431C2FC57E00DE929A /* libpjsip-simple-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libpjsip-simple-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A9441C2FC57E00DE929A /* libpjsip-ua-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libpjsip-ua-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A9451C2FC57E00DE929A /* libpjsua-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libpjsua-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A9461C2FC57E00DE929A /* libpjsua2-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libpjsua2-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A9471C2FC57E00DE929A /* libresample-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libresample-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A9481C2FC57E00DE929A /* libspeex-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libspeex-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		3983A9491C2FC57E00DE929A /* libsrtp-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libsrtp-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		39C35F1F1B0B3F1E009ACDF5 /* phone.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = phone.caf; sourceTree = "<group>"; };
+		39D219EA1B05A191006EB7C2 /* MZTimerLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MZTimerLabel.h; sourceTree = "<group>"; };
+		39D219EB1B05A191006EB7C2 /* MZTimerLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MZTimerLabel.m; sourceTree = "<group>"; };
+		39DB2F951B09B79400E630BC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		39DB2F961B09B79400E630BC /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		39DB2F971B09B79400E630BC /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		DFE5F6531ADBC91500CA8209 /* sip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sip.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DFE5F6571ADBC91500CA8209 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DFE5F6581ADBC91500CA8209 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DFE5F65A1ADBC91500CA8209 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		DFE5F65B1ADBC91500CA8209 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		DFE5F65D1ADBC91500CA8209 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		DFE5F65E1ADBC91500CA8209 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		DFE5F6611ADBC91500CA8209 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		DFE5F6631ADBC91500CA8209 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DFE5F6661ADBC91500CA8209 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		DFE5F66C1ADBC91500CA8209 /* sipTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = sipTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DFE5F6711ADBC91500CA8209 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DFE5F6721ADBC91500CA8209 /* sipTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = sipTests.m; sourceTree = "<group>"; };
+		DFE5F6A71ADBCEB400CA8209 /* Pjsip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pjsip.h; sourceTree = "<group>"; };
+		DFE5F6A81ADBCEB400CA8209 /* Pjsip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pjsip.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DFE5F6501ADBC91500CA8209 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393F21E51B12CD4B00608F44 /* Foundation.framework in Frameworks */,
+				3983A9501C2FC57E00DE929A /* libpjmedia-audiodev-arm-apple-darwin9.a in Frameworks */,
+				3983A9511C2FC57E00DE929A /* libpjmedia-codec-arm-apple-darwin9.a in Frameworks */,
+				3983A94C1C2FC57E00DE929A /* libilbccodec-arm-apple-darwin9.a in Frameworks */,
+				3983A94E1C2FC57E00DE929A /* libpjlib-util-arm-apple-darwin9.a in Frameworks */,
+				3983A95C1C2FC57E00DE929A /* libsrtp-arm-apple-darwin9.a in Frameworks */,
+				3983A9571C2FC57E00DE929A /* libpjsip-ua-arm-apple-darwin9.a in Frameworks */,
+				3983A94B1C2FC57E00DE929A /* libgsmcodec-arm-apple-darwin9.a in Frameworks */,
+				393F21E31B12CD4000608F44 /* UIKit.framework in Frameworks */,
+				3983A9561C2FC57E00DE929A /* libpjsip-simple-arm-apple-darwin9.a in Frameworks */,
+				3983A9541C2FC57E00DE929A /* libpjsdp-arm-apple-darwin9.a in Frameworks */,
+				3983A9581C2FC57E00DE929A /* libpjsua-arm-apple-darwin9.a in Frameworks */,
+				3983A95A1C2FC57E00DE929A /* libresample-arm-apple-darwin9.a in Frameworks */,
+				3983A94F1C2FC57E00DE929A /* libpjmedia-arm-apple-darwin9.a in Frameworks */,
+				3983A94D1C2FC57E00DE929A /* libpj-arm-apple-darwin9.a in Frameworks */,
+				3983A95B1C2FC57E00DE929A /* libspeex-arm-apple-darwin9.a in Frameworks */,
+				3983A9521C2FC57E00DE929A /* libpjmedia-videodev-arm-apple-darwin9.a in Frameworks */,
+				393F21E11B12CD3800608F44 /* CoreGraphics.framework in Frameworks */,
+				3983A94A1C2FC57E00DE929A /* libg7221codec-arm-apple-darwin9.a in Frameworks */,
+				1BB249591ADCBC1D006BE66F /* libz.1.1.3.dylib in Frameworks */,
+				1BB249571ADCBC11006BE66F /* AudioToolbox.framework in Frameworks */,
+				1BB249551ADCBC00006BE66F /* AVFoundation.framework in Frameworks */,
+				3983A9591C2FC57E00DE929A /* libpjsua2-arm-apple-darwin9.a in Frameworks */,
+				3983A9531C2FC57E00DE929A /* libpjnath-arm-apple-darwin9.a in Frameworks */,
+				3983A9551C2FC57E00DE929A /* libpjsip-arm-apple-darwin9.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DFE5F6691ADBC91500CA8209 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1BB249521ADCBBC8006BE66F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				393F21E41B12CD4B00608F44 /* Foundation.framework */,
+				393F21E21B12CD4000608F44 /* UIKit.framework */,
+				393F21E01B12CD3800608F44 /* CoreGraphics.framework */,
+				1BB249581ADCBC1D006BE66F /* libz.1.1.3.dylib */,
+				1BB249561ADCBC11006BE66F /* AudioToolbox.framework */,
+				1BB249541ADCBC00006BE66F /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			path = sipTests;
+			sourceTree = "<group>";
+		};
+		DFE5F64A1ADBC91500CA8209 = {
+			isa = PBXGroup;
+			children = (
+				DFE5F6551ADBC91500CA8209 /* sip */,
+				1BB249521ADCBBC8006BE66F /* Frameworks */,
+				DFE5F66F1ADBC91500CA8209 /* sipTests */,
+				DFE5F6541ADBC91500CA8209 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DFE5F6541ADBC91500CA8209 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DFE5F6531ADBC91500CA8209 /* sip.app */,
+				DFE5F66C1ADBC91500CA8209 /* sipTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DFE5F6551ADBC91500CA8209 /* sip */ = {
+			isa = PBXGroup;
+			children = (
+				DFE5F6A61ADBCDBE00CA8209 /* lib */,
+				DFE5F65A1ADBC91500CA8209 /* AppDelegate.h */,
+				DFE5F65B1ADBC91500CA8209 /* AppDelegate.m */,
+				DFE5F65D1ADBC91500CA8209 /* ViewController.h */,
+				DFE5F65E1ADBC91500CA8209 /* ViewController.m */,
+				DFE5F6A71ADBCEB400CA8209 /* Pjsip.h */,
+				DFE5F6A81ADBCEB400CA8209 /* Pjsip.m */,
+				DFE5F6601ADBC91500CA8209 /* Main.storyboard */,
+				DFE5F6631ADBC91500CA8209 /* Images.xcassets */,
+				DFE5F6651ADBC91500CA8209 /* LaunchScreen.xib */,
+				DFE5F6561ADBC91500CA8209 /* Supporting Files */,
+			);
+			path = sip;
+			sourceTree = "<group>";
+		};
+		DFE5F6561ADBC91500CA8209 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				39D219EA1B05A191006EB7C2 /* MZTimerLabel.h */,
+				39D219EB1B05A191006EB7C2 /* MZTimerLabel.m */,
+				39C35F1F1B0B3F1E009ACDF5 /* phone.caf */,
+				39DB2F951B09B79400E630BC /* Default-568h@2x.png */,
+				39DB2F961B09B79400E630BC /* Default.png */,
+				39DB2F971B09B79400E630BC /* Default@2x.png */,
+				DFE5F6571ADBC91500CA8209 /* Info.plist */,
+				DFE5F6581ADBC91500CA8209 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DFE5F66F1ADBC91500CA8209 /* sipTests */ = {
+			isa = PBXGroup;
+			children = (
+				DFE5F6721ADBC91500CA8209 /* sipTests.m */,
+				DFE5F6701ADBC91500CA8209 /* Supporting Files */,
+			);
+			path = sipTests;
+			sourceTree = "<group>";
+		};
+		DFE5F6701ADBC91500CA8209 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DFE5F6711ADBC91500CA8209 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DFE5F6A61ADBCDBE00CA8209 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				3983A9371C2FC57E00DE929A /* libg7221codec-arm-apple-darwin9.a */,
+				3983A9381C2FC57E00DE929A /* libgsmcodec-arm-apple-darwin9.a */,
+				3983A9391C2FC57E00DE929A /* libilbccodec-arm-apple-darwin9.a */,
+				3983A93A1C2FC57E00DE929A /* libpj-arm-apple-darwin9.a */,
+				3983A93B1C2FC57E00DE929A /* libpjlib-util-arm-apple-darwin9.a */,
+				3983A93C1C2FC57E00DE929A /* libpjmedia-arm-apple-darwin9.a */,
+				3983A93D1C2FC57E00DE929A /* libpjmedia-audiodev-arm-apple-darwin9.a */,
+				3983A93E1C2FC57E00DE929A /* libpjmedia-codec-arm-apple-darwin9.a */,
+				3983A93F1C2FC57E00DE929A /* libpjmedia-videodev-arm-apple-darwin9.a */,
+				3983A9401C2FC57E00DE929A /* libpjnath-arm-apple-darwin9.a */,
+				3983A9411C2FC57E00DE929A /* libpjsdp-arm-apple-darwin9.a */,
+				3983A9421C2FC57E00DE929A /* libpjsip-arm-apple-darwin9.a */,
+				3983A9431C2FC57E00DE929A /* libpjsip-simple-arm-apple-darwin9.a */,
+				3983A9441C2FC57E00DE929A /* libpjsip-ua-arm-apple-darwin9.a */,
+				3983A9451C2FC57E00DE929A /* libpjsua-arm-apple-darwin9.a */,
+				3983A9461C2FC57E00DE929A /* libpjsua2-arm-apple-darwin9.a */,
+				3983A9471C2FC57E00DE929A /* libresample-arm-apple-darwin9.a */,
+				3983A9481C2FC57E00DE929A /* libspeex-arm-apple-darwin9.a */,
+				3983A9491C2FC57E00DE929A /* libsrtp-arm-apple-darwin9.a */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DFE5F6521ADBC91500CA8209 /* sip */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DFE5F6761ADBC91500CA8209 /* Build configuration list for PBXNativeTarget "sip" */;
+			buildPhases = (
+				DFE5F64F1ADBC91500CA8209 /* Sources */,
+				DFE5F6501ADBC91500CA8209 /* Frameworks */,
+				DFE5F6511ADBC91500CA8209 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = sip;
+			productName = sip;
+			productReference = DFE5F6531ADBC91500CA8209 /* sip.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DFE5F66B1ADBC91500CA8209 /* sipTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DFE5F6791ADBC91500CA8209 /* Build configuration list for PBXNativeTarget "sipTests" */;
+			buildPhases = (
+				DFE5F6681ADBC91500CA8209 /* Sources */,
+				DFE5F6691ADBC91500CA8209 /* Frameworks */,
+				DFE5F66A1ADBC91500CA8209 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DFE5F66E1ADBC91500CA8209 /* PBXTargetDependency */,
+			);
+			name = sipTests;
+			productName = sipTests;
+			productReference = DFE5F66C1ADBC91500CA8209 /* sipTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DFE5F64B1ADBC91500CA8209 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = "伟斌";
+				TargetAttributes = {
+					DFE5F6521ADBC91500CA8209 = {
+						CreatedOnToolsVersion = 6.3;
+					};
+					DFE5F66B1ADBC91500CA8209 = {
+						CreatedOnToolsVersion = 6.3;
+						TestTargetID = DFE5F6521ADBC91500CA8209;
+					};
+				};
+			};
+			buildConfigurationList = DFE5F64E1ADBC91500CA8209 /* Build configuration list for PBXProject "sip" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DFE5F64A1ADBC91500CA8209;
+			productRefGroup = DFE5F6541ADBC91500CA8209 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DFE5F6521ADBC91500CA8209 /* sip */,
+				DFE5F66B1ADBC91500CA8209 /* sipTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DFE5F6511ADBC91500CA8209 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				39DB2F9A1B09B79400E630BC /* Default@2x.png in Resources */,
+				DFE5F6621ADBC91500CA8209 /* Main.storyboard in Resources */,
+				39DB2F981B09B79400E630BC /* Default-568h@2x.png in Resources */,
+				DFE5F6671ADBC91500CA8209 /* LaunchScreen.xib in Resources */,
+				DFE5F6641ADBC91500CA8209 /* Images.xcassets in Resources */,
+				39C35F201B0B3F1E009ACDF5 /* phone.caf in Resources */,
+				39DB2F991B09B79400E630BC /* Default.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DFE5F66A1ADBC91500CA8209 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DFE5F64F1ADBC91500CA8209 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				39D219EC1B05A191006EB7C2 /* MZTimerLabel.m in Sources */,
+				DFE5F6A91ADBCEB400CA8209 /* Pjsip.m in Sources */,
+				DFE5F65F1ADBC91500CA8209 /* ViewController.m in Sources */,
+				DFE5F65C1ADBC91500CA8209 /* AppDelegate.m in Sources */,
+				DFE5F6591ADBC91500CA8209 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DFE5F6681ADBC91500CA8209 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DFE5F6731ADBC91500CA8209 /* sipTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DFE5F66E1ADBC91500CA8209 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DFE5F6521ADBC91500CA8209 /* sip */;
+			targetProxy = DFE5F66D1ADBC91500CA8209 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		DFE5F6601ADBC91500CA8209 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DFE5F6611ADBC91500CA8209 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		DFE5F6651ADBC91500CA8209 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DFE5F6661ADBC91500CA8209 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DFE5F6741ADBC91500CA8209 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DFE5F6751ADBC91500CA8209 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		DFE5F6771ADBC91500CA8209 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(PROJECT_DIR)/include",
+				);
+				INFOPLIST_FILE = sip/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/lib",
+					"$(PROJECT_DIR)/sip",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 armv7s arm64";
+			};
+			name = Debug;
+		};
+		DFE5F6781ADBC91500CA8209 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(PROJECT_DIR)/include",
+				);
+				INFOPLIST_FILE = sip/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/lib",
+					"$(PROJECT_DIR)/sip",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 armv7s arm64";
+			};
+			name = Release;
+		};
+		DFE5F67A1ADBC91500CA8209 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = sipTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/sip.app/sip";
+			};
+			name = Debug;
+		};
+		DFE5F67B1ADBC91500CA8209 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = sipTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/sip.app/sip";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DFE5F64E1ADBC91500CA8209 /* Build configuration list for PBXProject "sip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DFE5F6741ADBC91500CA8209 /* Debug */,
+				DFE5F6751ADBC91500CA8209 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DFE5F6761ADBC91500CA8209 /* Build configuration list for PBXNativeTarget "sip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DFE5F6771ADBC91500CA8209 /* Debug */,
+				DFE5F6781ADBC91500CA8209 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DFE5F6791ADBC91500CA8209 /* Build configuration list for PBXNativeTarget "sipTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DFE5F67A1ADBC91500CA8209 /* Debug */,
+				DFE5F67B1ADBC91500CA8209 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DFE5F64B1ADBC91500CA8209 /* Project object */;
+}
