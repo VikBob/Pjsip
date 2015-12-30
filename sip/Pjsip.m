@@ -20,22 +20,8 @@
 
 
 
-+ (Pjsip *)sharedXCPjsua
-{
-    static Pjsip *sharedInstance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[Pjsip alloc] init];
-        
-    });
-    return sharedInstance;
-}
-static void on_reg_state2(pjsua_acc_id acc_id, pjsua_reg_info *info);
-/* Callback called by the library when registration state has changed */
-static void on_reg_state2(pjsua_acc_id acc_id, pjsua_reg_info *info)
-{
-    [[Pjsip sharedXCPjsua]  handleRegistrationStateChangeWithRegInfo: info];
-}
+
+
 -(void)answer:(int)callId
 {
     
@@ -87,7 +73,6 @@ static void on_incoming_call(pjsua_acc_id acc_id, pjsua_call_id call_id,
 /* Callback called by the library when call's state has changed */
 static void on_call_state(pjsua_call_id call_id, pjsip_event *e)
 {
-    /***  呼叫状态改变的回调函数 */
     pjsua_call_info ci;
     
     PJ_UNUSED_ARG(e);
@@ -95,15 +80,6 @@ static void on_call_state(pjsua_call_id call_id, pjsip_event *e)
     pjsua_call_get_info(call_id, &ci);
     PJ_LOG(3,(THIS_FILE, "Call %d state=%.*s", call_id,
               (int)ci.state_text.slen,ci.state_text.ptr));
-    
-    
-    if (!strcmp(ci.state_text.ptr, "DISCONNCTD"))
-    {
-        // 通话已经结束  无论是对方挂断还是我自己挂断都进入这个方法
-        NSNotificationCenter *center =[NSNotificationCenter defaultCenter];
-        NSNotification *notify =[NSNotification notificationWithName:@"whoHangUp" object:nil];
-        [center postNotification:notify];
-    }
 }
 
 
@@ -130,7 +106,7 @@ static void error_exit(const char *title, pj_status_t status)
     
 }
 
-/***  注册pjsip */
+
 - (int)registerToServer:(NSString *)domian username:(NSString *)username passwd:(NSString *)passwd
 {
     
@@ -156,8 +132,7 @@ static void error_exit(const char *title, pj_status_t status)
         cfg.cb.on_call_media_state = &on_call_media_state;
         cfg.cb.on_call_state = &on_call_state;
         
-        
-        cfg.cb.on_reg_state2 = &on_reg_state2;
+
         pjsua_logging_config_default(&log_cfg);
         log_cfg.console_level = 4;
         
@@ -223,35 +198,7 @@ static void error_exit(const char *title, pj_status_t status)
    // pjsip_status_code
     return 0;
 }
-- (void)handleRegistrationStateChangeWithRegInfo: (pjsua_reg_info *)info
-{
-    NSLog(@"cbparam->code:%d",info->cbparam->code);
-    
-    //发送通知来更改登陆与否状态
-    if (info->cbparam->code == 200)
-    {
-        if (statusInt %2 == 0)
-        {
-            NSNotificationCenter *center =[NSNotificationCenter defaultCenter];
-            NSNotification *notify =[NSNotification notificationWithName:@"loginOrNot" object:@(info->cbparam->code)];
-            [center postNotification:notify];
-            statusInt = statusInt + 1;
-        }
-        else
-        {
-            statusInt ++;
-        }
-    }
-    
-    //登陆失败必须发通知改变状态
-    if (info->cbparam->code == 403)
-    {
-        NSNotificationCenter *center =[NSNotificationCenter defaultCenter];
-        NSNotification *notify =[NSNotification notificationWithName:@"loginOrNot" object:@(info->cbparam->code)];
-        [center postNotification:notify];
-        
-    }
-}
+
 
 /***  挂电话 */
 - (void) callHangup

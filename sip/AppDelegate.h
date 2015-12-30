@@ -12,7 +12,7 @@ static UINavigationController *nav;
 
 
 @property (strong, nonatomic) UIWindow *window;
-@property (nonatomic,strong)UIImageView *lockView;
+
 
 
 @end
