@@ -9,23 +9,15 @@
 #import "Pjsip.h"
 #include <pjsua-lib/pjsua.h>
 #include <pjsua-lib/pjsua_internal.h>
-#import <AudioToolbox/AudioToolbox.h>
+
 
 
 @implementation Pjsip
-{
-    int statusInt;//监听登陆成功和失败的数
-  
-}
-
-
-
-
 
 -(void)answer:(int)callId
 {
     
-    pjsua_call_answer(callId, 200, NULL, NULL); // 接来电
+    pjsua_call_answer(callId, 200, NULL, NULL);
 
 }
 
@@ -33,46 +25,21 @@
 static void on_incoming_call(pjsua_acc_id acc_id, pjsua_call_id call_id,
                              pjsip_rx_data *rdata)
 {
-    /*** 来电的回调函数 */
     pjsua_call_info ci;
-    
     PJ_UNUSED_ARG(acc_id);
     PJ_UNUSED_ARG(rdata);
-    //获取呼叫信息
     pjsua_call_get_info(call_id, &ci);
     pjsua_call_get_info(call_id, &ci);
-    
-   
     PJ_LOG(3,(THIS_FILE, "Incoming call from %.*s!!",
               (int)ci.remote_info.slen,ci.remote_info.ptr));
-   // NSLog(@"---------%ld,%s",ci.remote_info.slen,ci.remote_info.ptr);
-   // NSLog(@"-----------%d,%d, %d",call_id,acc_id,ci.id);
-    
-    char *phoneId = ci.remote_info.ptr;
-    NSArray *arr = @[@(call_id),[NSString stringWithFormat:@"%s",phoneId]];
-    
-    
-   
-    
-    
- //   [Pjsip sharedXCPjsua].callid = arr;
-    /***  发送通知给应用 有来电提示 */
-    NSNotificationCenter *center =[NSNotificationCenter defaultCenter];
-    NSNotification *notify =[NSNotification notificationWithName:@"reloadMessag" object:arr];
-    [center postNotification:notify];
-    
-   
-   
-    
-    
-    
-   // pjsua_call_answer(call_id, 200, NULL, NULL); // 接来电
+    pjsua_call_answer(call_id, 200, NULL, NULL);
 }
 
 
 /* Callback called by the library when call's state has changed */
 static void on_call_state(pjsua_call_id call_id, pjsip_event *e)
 {
+
     pjsua_call_info ci;
     
     PJ_UNUSED_ARG(e);
@@ -80,6 +47,8 @@ static void on_call_state(pjsua_call_id call_id, pjsip_event *e)
     pjsua_call_get_info(call_id, &ci);
     PJ_LOG(3,(THIS_FILE, "Call %d state=%.*s", call_id,
               (int)ci.state_text.slen,ci.state_text.ptr));
+    
+
 }
 
 
@@ -105,8 +74,6 @@ static void error_exit(const char *title, pj_status_t status)
     pjsua_destroy();
     
 }
-
-
 - (int)registerToServer:(NSString *)domian username:(NSString *)username passwd:(NSString *)passwd
 {
     
@@ -195,23 +162,16 @@ static void error_exit(const char *title, pj_status_t status)
             return -1;
         }
     }
-   // pjsip_status_code
     return 0;
 }
-
-
-/***  挂电话 */
 - (void) callHangup
 {
     pjsua_call_hangup_all();
 }
-/***  销毁  */
 - (void) unregister
 {
     pjsua_destroy();
 }
-
-/***  打电话 **/
 - (void) makeCall:(NSString *)callname domain:(NSString *)domian
 {
     NSString *ID = [NSString stringWithFormat:@"sip:%@@%@",callname,domian];

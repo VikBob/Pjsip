@@ -15,6 +15,5 @@
 @interface ViewController : UIViewController {
     Pjsip *sip;
 }
-+ (void)cancelLocalNotificationWithKey:(NSString *)key;
 @end
 

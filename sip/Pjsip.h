@@ -15,8 +15,6 @@
 
 @interface Pjsip : NSObject
 
-@property (nonatomic,strong)NSArray *callid;
-
 - (int) registerToServer:(NSString *)domian username:(NSString *)username passwd:(NSString *)passwd;
 - (void) callHangup;
 - (void) unregister;
