@@ -27,12 +27,10 @@
     [self.callWho resignFirstResponder];
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
     sip = [[Pjsip alloc]init];
-
-    
 }
 
 - (void)didReceiveMemoryWarning

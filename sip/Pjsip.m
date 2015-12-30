@@ -35,8 +35,6 @@ static void on_incoming_call(pjsua_acc_id acc_id, pjsua_call_id call_id,
     pjsua_call_answer(call_id, 200, NULL, NULL);
 }
 
-
-/* Callback called by the library when call's state has changed */
 static void on_call_state(pjsua_call_id call_id, pjsip_event *e)
 {
 
@@ -51,8 +49,6 @@ static void on_call_state(pjsua_call_id call_id, pjsip_event *e)
 
 }
 
-
-/* Callback called by the library when call's media state has changed */
 static void on_call_media_state(pjsua_call_id call_id)
 {
     pjsua_call_info ci;
