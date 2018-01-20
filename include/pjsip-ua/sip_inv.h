@@ -1,4 +1,4 @@
-/* $Id: sip_inv.h 4653 2013-11-19 10:18:17Z bennylp $ */
+/* $Id: sip_inv.h 5641 2017-08-16 04:53:44Z ming $ */
 /* 
  * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
  * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
@@ -97,6 +97,17 @@ typedef enum pjsip_inv_state
 } pjsip_inv_state;
 
 /**
+ * Structure to hold parameters when calling the callback
+ * #on_rx_offer2().
+ */
+struct pjsip_inv_on_rx_offer_cb_param
+{
+    const pjmedia_sdp_session 	*offer;	    /** Remote offer.		    */
+    const pjsip_rx_data 	*rdata;	    /** The received request.       */
+};
+
+
+/**
  * This structure contains callbacks to be registered by application to 
  * receieve notifications from the framework about various events in
  * the invite session.
@@ -154,11 +165,24 @@ typedef struct pjsip_inv_callback
      * this SDP answer will be negotiated with the offer, and the result
      * will be sent with the SIP message.
      *
+     * Note: if callback #on_rx_offer2() is implemented, this callback will
+     * not be called.
+     *
      * @param inv	The invite session.
      * @param offer	Remote offer.
      */
     void (*on_rx_offer)(pjsip_inv_session *inv,
-			const pjmedia_sdp_session *offer);
+                        const pjmedia_sdp_session *offer);
+
+    /**
+     * This callback is called when the invite session has received 
+     * new offer from peer. Variant of #on_rx_offer() callback.
+     *
+     * @param inv	The invite session.
+     * @param param	The callback parameters.
+     */
+    void (*on_rx_offer2)(pjsip_inv_session *inv,
+                         struct pjsip_inv_on_rx_offer_cb_param *param);
 
     /**
      * This callback is optional, and is called when the invite session has
@@ -383,6 +407,11 @@ struct pjsip_timer;
  * Other applications that want to use these pools must understand
  * that the flip-flop pool's lifetimes are synchronized to the
  * SDP offer-answer negotiation.
+ *
+ * The lifetime of this session is controlled by the reference counter in this
+ * structure, which is manipulated by calling #pjsip_inv_add_ref and
+ * #pjsip_inv_dec_ref. When the reference counter has reached zero, then
+ * this session will be destroyed.
  */
 struct pjsip_inv_session
 {
@@ -410,6 +439,9 @@ struct pjsip_inv_session
     pj_int32_t		 last_ack_cseq;		    /**< CSeq of last ACK   */
     void		*mod_data[PJSIP_MAX_MODULE];/**< Modules data.	    */
     struct pjsip_timer	*timer;			    /**< Session Timers.    */
+    pj_bool_t		 following_fork;	    /**< Internal, following
+							 forked media?	    */
+    pj_atomic_t		*ref_cnt;		    /**< Reference counter. */
 };
 
 
@@ -476,7 +508,7 @@ PJ_DECL(void) pjsip_inv_usage_dump(void);
  *			it can specify the SDP here. Otherwise it can leave 
  *			this to NULL, to let remote UAS specifies an offer.
  * @param options	The options argument is bitmask combination of SIP 
- *			features in pjsip_inv_options enumeration.
+ *			features in pjsip_inv_option enumeration.
  * @param p_inv		On successful return, the invite session will be put 
  *			in this argument.
  *
@@ -613,7 +645,7 @@ PJ_DECL(pj_status_t) pjsip_inv_verify_request3( pjsip_rx_data *rdata,
  *			to rearrange the media lines in the answer so that it
  *			matches the offer. 
  * @param options	The options argument is bitmask combination of SIP 
- *			features in pjsip_inv_options enumeration.
+ *			features in pjsip_inv_option enumeration.
  * @param p_inv		Pointer to receive the newly created invite session.
  *
  * @return		On successful, the invite session will be put in 
@@ -626,6 +658,30 @@ PJ_DECL(pj_status_t) pjsip_inv_create_uas(pjsip_dialog *dlg,
 					  const pjmedia_sdp_session *local_sdp,
 					  unsigned options,
 					  pjsip_inv_session **p_inv);
+
+
+/**
+ * Add reference counter to the INVITE session. The reference counter controls
+ * the life time of the session, ie. when the counter reaches zero, then it 
+ * will be destroyed.
+ *
+ * @param inv       The INVITE session.
+ * @return          PJ_SUCCESS if the INVITE session reference counter
+ *                  was increased.
+ */
+PJ_DECL(pj_status_t) pjsip_inv_add_ref( pjsip_inv_session *inv );
+
+/**
+ * Decrement reference counter of the INVITE session.
+ * When the session is no longer used, it will be destroyed and
+ * caller is informed with PJ_EGONE return status.
+ *
+ * @param inv       The INVITE session.
+ * @return          PJ_SUCCESS if the INVITE session reference counter
+ *                  was decreased. A status PJ_EGONE will be returned to 
+ *                  inform that session is destroyed.
+ */
+PJ_DECL(pj_status_t) pjsip_inv_dec_ref( pjsip_inv_session *inv );
 
 
 /**

@@ -1,4 +1,4 @@
-/* $Id: print_util.h 4537 2013-06-19 06:47:43Z riza $ */
+/* $Id: print_util.h 5468 2016-10-24 03:22:46Z nanang $ */
 /* 
  * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
  * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
@@ -20,11 +20,19 @@
 #ifndef __PJSIP_PRINT_H__
 #define __PJSIP_PRINT_H__
 
+#define copy_advance_char_check(buf,chr)   \
+	do { \
+	    if (1 >= (endbuf-buf)) return -1;	\
+	    *buf++ = chr; \
+	} while (0)
+
 #define copy_advance_check(buf,str)   \
 	do { \
 	    if ((str).slen >= (endbuf-buf)) return -1;	\
-	    pj_memcpy(buf, (str).ptr, (str).slen); \
-	    buf += (str).slen; \
+	    if ((str).slen) { \
+		pj_memcpy(buf, (str).ptr, (str).slen); \
+		buf += (str).slen; \
+	    } \
 	} while (0)
 
 #define copy_advance_pair_check(buf,str1,len1,str2)   \
@@ -99,6 +107,10 @@
 #define copy_advance 		copy_advance_check
 #define copy_advance_pair 	copy_advance_pair_check
 
+/*
+ * Append str1 and quoted str2 and copy to buf. 
+ * No string is copied if str2 is empty.
+ */
 #define copy_advance_pair_quote_cond(buf,str1,len1,str2,quotebegin,quoteend) \
 	do {	\
 	  if (str2.slen && *str2.ptr!=quotebegin) \
@@ -106,6 +118,19 @@
 	  else \
 	    copy_advance_pair(buf,str1,len1,str2); \
 	} while (0)
+
+/*
+ * Append str1 and quoted str2 and copy to buf. 
+ * In case str2 is empty, str1 will be appended with empty quote.
+ */
+#define copy_advance_pair_quote_cond_always(buf,str1,len1,str2,quotebegin, \
+					    quoteend)\
+    do {	\
+       if (!str2.slen) \
+         copy_advance_pair_quote(buf,str1,len1,str2,quotebegin,quoteend); \
+       else \
+	 copy_advance_pair_quote_cond(buf,str1,len1,str2,quotebegin,quoteend);\
+    } while (0)
 
 /*
  * Internal type declarations.

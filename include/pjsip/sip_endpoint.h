@@ -1,4 +1,4 @@
-/* $Id: sip_endpoint.h 4275 2012-10-04 06:11:58Z bennylp $ */
+/* $Id: sip_endpoint.h 5397 2016-07-26 02:58:44Z nanang $ */
 /* 
  * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
  * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
@@ -391,6 +391,24 @@ PJ_DECL(pj_status_t) pjsip_endpt_set_resolver(pjsip_endpoint *endpt,
 					      pj_dns_resolver *resv);
 
 /**
+ * Set the DNS external resolver implementation to use in the SIP resolver. 
+ *
+ * Note that naturally when implementing its own resolver, application would not
+ * need the internal resolver, hence this function will also destroy the 
+ * PJLIB-UTIL DNS resolver if any (e.g: set using #pjsip_endpt_set_resolver()). 
+ * Application that needs it, still be able create its own instance. 
+ *
+ * @param res       The SIP resolver engine.
+ * @param ext_res   The external resolver implementation callback. This argument
+ *		    can be NULL to reset the whole external implementation. 
+ *		    However, it is prohibited to reset individual callback.
+ * 
+ * @return	    PJ_SUCCESS on success, or the appropriate error code.
+ */
+PJ_DECL(pj_status_t) pjsip_endpt_set_ext_resolver(pjsip_endpoint *endpt,
+						  pjsip_ext_resolver *ext_res);
+
+/**
  * Get the DNS resolver being used by the SIP resolver.
  *
  * @param endpt		The SIP endpoint instance.
@@ -565,7 +583,8 @@ PJ_DECL(pj_bool_t) pjsip_endpt_has_capability( pjsip_endpoint *endpt,
  * @param hname	    If htype specifies PJSIP_H_OTHER, then the header name
  *		    must be supplied in this argument. Otherwise the value
  *		    must be set to NULL.
- * @param count	    The number of tags in the array.
+ * @param count	    The number of tags in the array. The value must not
+ *		    be greater than PJSIP_GENERIC_ARRAY_MAX_COUNT.
  * @param tags	    Array of tags describing the capabilities or extensions
  *		    to be added to the appropriate header.
  *

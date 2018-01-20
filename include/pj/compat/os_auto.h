@@ -1,5 +1,5 @@
 /* pjlib/include/pj/compat/os_auto.h.  Generated from os_auto.h.in by configure.  */
-/* $Id: os_auto.h.in 3841 2011-10-24 09:28:13Z ming $ */
+/* $Id: os_auto.h.in 5543 2017-01-24 05:36:50Z nanang $ */
 /* 
  * Copyright (C) 2008-2009 Teluu Inc. (http://www.teluu.com)
  * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
@@ -28,7 +28,7 @@
  */
 
 /* Canonical OS name */
-#define PJ_OS_NAME "arm-apple-darwin9"
+#define PJ_OS_NAME "arm64-apple-darwin_ios"
 
 /* Legacy macros */
 /* #undef PJ_WIN32 */
@@ -38,6 +38,7 @@
 /* #undef PJ_LINUX */
 /* #undef PJ_RTEMS */
 /* #undef PJ_SUNOS */
+/* #undef PJ_ANDROID */
 
 #if defined(PJ_WIN32_WINNT) && !defined(_WIN32_WINNT)
 #  define _WIN32_WINNT	PJ_WIN32_WINNT
@@ -84,6 +85,7 @@
 /* #undef PJ_HAS_WINSOCK2_H */
 /* #undef PJ_HAS_WS2TCPIP_H */
 
+#define PJ_SOCK_HAS_IPV6_V6ONLY 1
 #define PJ_SOCK_HAS_INET_ATON 1
 #define PJ_SOCK_HAS_INET_PTON 1
 #define PJ_SOCK_HAS_INET_NTOP 1
@@ -129,6 +131,9 @@
  */
 #define PJ_SELECT_NEEDS_NFDS 0
 
+/* Was Linux epoll support enabled */
+/* #undef PJ_HAS_LINUX_EPOLL */
+
 /* Is errno a good way to retrieve OS errors?
  */
 #define PJ_HAS_ERRNO_VAR 1
@@ -163,23 +168,31 @@
 #   define PJ_OS_HAS_CHECK_STACK    0
 #endif
 
+/* Is localtime_r() available? */
+#define PJ_HAS_LOCALTIME_R 1
+
 /* Unicode? */
 #define PJ_NATIVE_STRING_IS_UNICODE 0
 
 /* Pool alignment in bytes */
-#define PJ_POOL_ALIGNMENT 4
+#define PJ_POOL_ALIGNMENT 8
 
 /* The type of atomic variable value: */
 #define PJ_ATOMIC_VALUE_TYPE long
 
 #if defined(PJ_DARWINOS) && PJ_DARWINOS!=0
+     /* Disable local host resolution in pj_gethostip() (see ticket #1342) */
+#    define PJ_GETHOSTIP_DISABLE_LOCAL_RESOLUTION 1
+     /* Use pj_getaddrinfo() (instead of pj_inet_pton()) in
+      * pj_sockaddr_set_str_addr()
+      */
+#    define PJ_SOCKADDR_USE_GETADDRINFO 1
+
 #    include "TargetConditionals.h"
 #    if TARGET_OS_IPHONE
 #	include "Availability.h"
 	/* Use CFHost API for pj_getaddrinfo() (see ticket #1246) */
 #	define PJ_GETADDRINFO_USE_CFHOST 1
-	/* Disable local host resolution in pj_gethostip() (see ticket #1342) */
-#	define PJ_GETHOSTIP_DISABLE_LOCAL_RESOLUTION 1
 #    	ifdef __IPHONE_4_0
  	    /* Is multitasking support available?  (see ticket #1107) */
 #	    define PJ_IPHONE_OS_HAS_MULTITASKING_SUPPORT 	1
@@ -205,7 +218,7 @@
 
 /* SSL socket availability. */
 #ifndef PJ_HAS_SSL_SOCK
-#define PJ_HAS_SSL_SOCK 1
+/* #undef PJ_HAS_SSL_SOCK */
 #endif
 
 

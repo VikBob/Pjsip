@@ -1,4 +1,4 @@
-/* $Id: sip_transport_tls.h 4860 2014-06-19 05:07:12Z riza $ */
+/* $Id: sip_transport_tls.h 5649 2017-09-15 05:32:08Z riza $ */
 /* 
  * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
  * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
@@ -51,18 +51,28 @@ PJ_BEGIN_DECL
 #   define PJSIP_SSL_DEFAULT_METHOD	PJSIP_TLSV1_METHOD
 #endif
 
+
 /** SSL protocol method constants. */
 typedef enum pjsip_ssl_method
 {
-    PJSIP_SSL_UNSPECIFIED_METHOD= 0,	/**< Default protocol method.	*/
-    PJSIP_TLSV1_METHOD		= 31,	/**< Use SSLv1 method.		*/
-    PJSIP_SSLV2_METHOD		= 20,	/**< Use SSLv2 method.		*/
-    PJSIP_SSLV3_METHOD		= 30,	/**< Use SSLv3 method.		*/
-    PJSIP_SSLV23_METHOD		= 23	/**< Use SSLv23 method.		*/
+    PJSIP_SSL_UNSPECIFIED_METHOD = 0,	/**< Default protocol method.	*/    
+    PJSIP_SSLV2_METHOD		 = 20,	/**< Use SSLv2 method.		*/
+    PJSIP_SSLV3_METHOD		 = 30,	/**< Use SSLv3 method.		*/
+    PJSIP_TLSV1_METHOD		 = 31,	/**< Use TLSv1 method.		*/
+    PJSIP_TLSV1_1_METHOD	 = 32,	/**< Use TLSv1_1 method.	*/
+    PJSIP_TLSV1_2_METHOD	 = 33,	/**< Use TLSv1_2 method.	*/
+    PJSIP_SSLV23_METHOD		 = 23,	/**< Use SSLv23 method.		*/
 } pjsip_ssl_method;
 
-
-
+/**
+ * The default enabled SSL proto to be used.
+ * Default is all protocol above TLSv1 (TLSv1 & TLS v1.1 & TLS v1.2).
+ */
+#ifndef PJSIP_SSL_DEFAULT_PROTO
+#   define PJSIP_SSL_DEFAULT_PROTO  (PJ_SSL_SOCK_PROTO_TLS1 | \
+				     PJ_SSL_SOCK_PROTO_TLS1_1 | \
+				     PJ_SSL_SOCK_PROTO_TLS1_2)
+#endif
 
 /**
  * TLS transport settings.
@@ -73,6 +83,11 @@ typedef struct pjsip_tls_setting
      * Certificate of Authority (CA) list file.
      */
     pj_str_t	ca_list_file;
+
+    /**
+     * Certificate of Authority (CA) list directory path.
+     */
+    pj_str_t	ca_list_path;
 
     /**
      * Public endpoint certificate file, which will be used as client-
@@ -92,19 +107,23 @@ typedef struct pjsip_tls_setting
     pj_str_t	password;
 
     /**
-     * TLS protocol method from #pjsip_ssl_method, which can be:
-     *	- PJSIP_SSL_UNSPECIFIED_METHOD(0): default (which will use 
-     *                                     PJSIP_SSL_DEFAULT_METHOD)
-     *	- PJSIP_TLSV1_METHOD(1):	   TLSv1
-     *	- PJSIP_SSLV2_METHOD(2):	   SSLv2
-     *	- PJSIP_SSLV3_METHOD(3):	   SSL3
-     *	- PJSIP_SSLV23_METHOD(23):	   SSL23
+     * TLS protocol method from #pjsip_ssl_method. In the future, this field
+     * might be deprecated in favor of <b>proto</b> field. For now, this field 
+     * is only applicable only when <b>proto</b> field is set to zero.
      *
      * Default is PJSIP_SSL_UNSPECIFIED_METHOD (0), which in turn will
-     * use PJSIP_SSL_DEFAULT_METHOD, which default value is 
-     * PJSIP_TLSV1_METHOD.
+     * use PJSIP_SSL_DEFAULT_METHOD, which default value is PJSIP_TLSV1_METHOD.
      */
-    int		method;
+    pjsip_ssl_method	method;
+
+    /**
+     * TLS protocol type from #pj_ssl_sock_proto. Use this field to enable 
+     * specific protocol type. Use bitwise OR operation to combine the protocol 
+     * type.
+     *
+     * Default is PJSIP_SSL_DEFAULT_PROTO.
+     */
+    pj_uint32_t	proto;
 
     /**
      * Number of ciphers contained in the specified cipher preference. 
@@ -120,6 +139,51 @@ typedef struct pjsip_tls_setting
      * can be used to check the available ciphers supported by backend.
      */
     pj_ssl_cipher *ciphers;
+
+    /**
+     * Number of curves contained in the specified curve preference.
+     * If this is set to zero, then default curve list of the backend
+     * will be used.
+     *
+     * Default: 0 (zero).
+     */
+    unsigned curves_num;
+
+    /**
+     * Curves and order preference. The #pj_ssl_curve_get_availables()
+     * can be used to check the available curves supported by backend.
+     */
+    pj_ssl_curve *curves;
+
+    /**
+     * The supported signature algorithms. Set the sigalgs string
+     * using this form:
+     * "<DIGEST>+<ALGORITHM>:<DIGEST>+<ALGORITHM>"
+     * Digests are: "RSA", "DSA" or "ECDSA"
+     * Algorithms are: "MD5", "SHA1", "SHA224", "SHA256", "SHA384", "SHA512"
+     * Example: "ECDSA+SHA256:RSA+SHA256"
+     */
+    pj_str_t	sigalgs;
+
+    /**
+     * Reseed random number generator.
+     * For type #PJ_SSL_ENTROPY_FILE, parameter \a entropy_path
+     * must be set to a file.
+     * For type #PJ_SSL_ENTROPY_EGD, parameter \a entropy_path
+     * must be set to a socket.
+     *
+     * Default value is PJ_SSL_ENTROPY_NONE.
+    */
+    pj_ssl_entropy_t	entropy_type;
+
+    /**
+     * When using a file/socket for entropy #PJ_SSL_ENTROPY_EGD or
+     * #PJ_SSL_ENTROPY_FILE, \a entropy_path must contain the path
+     * to entropy socket/file.
+     *
+     * Default value is an empty string.
+     */
+    pj_str_t		entropy_path;
 
     /**
      * Specifies TLS transport behavior on the server TLS certificate 
@@ -252,6 +316,7 @@ PJ_INLINE(void) pjsip_tls_setting_default(pjsip_tls_setting *tls_opt)
     tls_opt->qos_type = PJ_QOS_TYPE_BEST_EFFORT;
     tls_opt->qos_ignore_error = PJ_TRUE;
     tls_opt->sockopt_ignore_error = PJ_TRUE;
+    tls_opt->proto = PJSIP_SSL_DEFAULT_PROTO;
 }
 
 
@@ -268,15 +333,26 @@ PJ_INLINE(void) pjsip_tls_setting_copy(pj_pool_t *pool,
 {
     pj_memcpy(dst, src, sizeof(*dst));
     pj_strdup_with_null(pool, &dst->ca_list_file, &src->ca_list_file);
+    pj_strdup_with_null(pool, &dst->ca_list_path, &src->ca_list_path);
     pj_strdup_with_null(pool, &dst->cert_file, &src->cert_file);
     pj_strdup_with_null(pool, &dst->privkey_file, &src->privkey_file);
     pj_strdup_with_null(pool, &dst->password, &src->password);
+    pj_strdup_with_null(pool, &dst->sigalgs, &src->sigalgs);
+    pj_strdup_with_null(pool, &dst->entropy_path, &src->entropy_path);
     if (src->ciphers_num) {
 	unsigned i;
 	dst->ciphers = (pj_ssl_cipher*) pj_pool_calloc(pool, src->ciphers_num,
 						       sizeof(pj_ssl_cipher));
 	for (i=0; i<src->ciphers_num; ++i)
 	    dst->ciphers[i] = src->ciphers[i];
+    }
+
+    if (src->curves_num) {
+	unsigned i;
+	dst->curves = (pj_ssl_curve*) pj_pool_calloc(pool, src->curves_num,
+						     sizeof(pj_ssl_curve));
+	for (i=0; i<src->curves_num; ++i)
+	    dst->curves[i] = src->curves[i];
     }
 }
 
@@ -353,11 +429,62 @@ PJ_DECL(pj_status_t) pjsip_tls_transport_start(pjsip_endpoint *endpt,
  *			the appropriate error code.
  */
 PJ_DECL(pj_status_t) pjsip_tls_transport_start2(pjsip_endpoint *endpt,
- 					        const pjsip_tls_setting *opt,
-					        const pj_sockaddr *local,
-					        const pjsip_host_port *a_name,
-					        unsigned async_cnt,
-					        pjsip_tpfactory **p_factory);
+						const pjsip_tls_setting *opt,
+						const pj_sockaddr *local,
+						const pjsip_host_port *a_name,
+						unsigned async_cnt,
+						pjsip_tpfactory **p_factory);
+
+/**
+ * Start the TLS listener, if the listener is not started yet. This is useful
+ * to start the listener manually, if listener was not started when
+ * PJSIP_TLS_TRANSPORT_DONT_CREATE_LISTENER is set to 0.
+ *
+ * @param factory	The SIP TLS transport factory.
+ *
+ * @param local		The address where the listener should be bound to.
+ *			Both IP interface address and port fields are optional.
+ *			If IP interface address is not specified, socket
+ *			will be bound to PJ_INADDR_ANY. If port is not
+ *			specified, socket will be bound to any port
+ *			selected by the operating system.
+ *
+ * @param a_name	The published address for the listener.
+ *			If this argument is NULL, then the bound address will
+ *			be used as the published address.
+ *
+ * @return		PJ_SUCCESS when the listener has been successfully
+ *			started.
+ */
+PJ_DECL(pj_status_t) pjsip_tls_transport_lis_start(pjsip_tpfactory *factory,
+						const pj_sockaddr *local,
+						const pjsip_host_port *a_name);
+
+
+/**
+ * Restart the TLS listener. This will close the listener socket and recreate
+ * the socket based on the config used when starting the transport.
+ *
+ * @param factory	The SIP TLS transport factory.
+ *
+ * @param local		The address where the listener should be bound to.
+ *			Both IP interface address and port fields are optional.
+ *			If IP interface address is not specified, socket
+ *			will be bound to PJ_INADDR_ANY. If port is not
+ *			specified, socket will be bound to any port
+ *			selected by the operating system.
+ *
+ * @param a_name	The published address for the listener.
+ *			If this argument is NULL, then the bound address will
+ *			be used as the published address.
+ *
+ * @return		PJ_SUCCESS when the listener has been successfully
+ *			restarted.
+ *
+ */
+PJ_DECL(pj_status_t) pjsip_tls_transport_restart(pjsip_tpfactory *factory,
+						const pj_sockaddr *local,
+						const pjsip_host_port *a_name);
 
 PJ_END_DECL
 

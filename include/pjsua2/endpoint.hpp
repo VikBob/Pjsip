@@ -1,4 +1,4 @@
-/* $Id: endpoint.hpp 4887 2014-08-13 09:14:53Z nanang $ */
+/* $Id: endpoint.hpp 5676 2017-10-24 07:31:39Z ming $ */
 /* 
  * Copyright (C) 2013 Teluu Inc. (http://www.teluu.com)
  *
@@ -124,6 +124,151 @@ struct OnTimerParam
 };
 
 /**
+ * SSL certificate type and name structure.
+ */
+struct SslCertName
+{
+    pj_ssl_cert_name_type  type;    	    /**< Name type		*/
+    string		   name;    	    /**< The name		*/
+};
+
+/**
+ * SSL certificate information.
+ */
+struct SslCertInfo
+{
+    unsigned		version;	    /**< Certificate version	*/
+    unsigned char	serialNo[20];	    /**< Serial number, array
+				         	 of octets, first index
+					 	 is MSB			*/
+    string		subjectCn;	    /**< Subject common name	*/
+    string		subjectInfo;	    /**< One line subject, fields
+					 	 are separated by slash, e.g:
+					 	 "CN=sample.org/OU=HRD" */
+
+    string		issuerCn;	    /**< Issuer common name	*/
+    string		issuerInfo;	    /**< One line subject, fields
+					 	 are separated by slash */
+
+    TimeVal		validityStart;	    /**< Validity start		*/
+    TimeVal		validityEnd;	    /**< Validity end		*/
+    bool		validityGmt;	    /**< Flag if validity 
+					 	 date/time use GMT	*/
+
+    vector<SslCertName> subjectAltName;     /**< Subject alternative
+					 	 name extension		*/
+
+    string 		raw;		    /**< Raw certificate in PEM
+    						 format, only available
+					 	 for remote certificate */
+
+public:
+    /**
+     * Constructor.
+     */
+    SslCertInfo();
+
+    /**
+     * Check if the info is set with empty values.
+     *
+     * @return      	True if the info is empty.
+     */
+    bool isEmpty() const;
+
+    /**
+     * Convert from pjsip
+     */
+    void fromPj(const pj_ssl_cert_info &info);
+    
+private:
+    bool empty;
+};
+
+/**
+ * TLS transport information.
+ */
+struct TlsInfo
+{
+    /**
+     * Describes whether secure socket connection is established, i.e: TLS/SSL 
+     * handshaking has been done successfully.
+     */
+    bool 		established;
+
+    /**
+     * Describes secure socket protocol being used, see #pj_ssl_sock_proto. 
+     * Use bitwise OR operation to combine the protocol type.
+     */
+    unsigned 		protocol;
+
+    /**
+     * Describes cipher suite being used, this will only be set when connection
+     * is established.
+     */
+    pj_ssl_cipher	cipher;
+
+    /**
+     * Describes cipher name being used, this will only be set when connection
+     * is established.
+     */
+    string		cipherName;
+
+    /**
+     * Describes local address.
+     */
+    SocketAddress 	localAddr;
+
+    /**
+     * Describes remote address.
+     */
+    SocketAddress 	remoteAddr;
+   
+    /**
+     * Describes active local certificate info. Use SslCertInfo.isEmpty()
+     * to check if the local cert info is available.
+     */
+    SslCertInfo 	localCertInfo;
+   
+    /**
+     * Describes active remote certificate info. Use SslCertInfo.isEmpty()
+     * to check if the remote cert info is available.
+     */
+    SslCertInfo 	remoteCertInfo;
+
+    /**
+     * Status of peer certificate verification.
+     */
+    unsigned		verifyStatus;
+
+    /**
+     * Error messages (if any) of peer certificate verification, based on
+     * the field verifyStatus above.
+     */
+    StringVector	verifyMsgs;
+
+public:
+    /**
+     * Constructor.
+     */
+    TlsInfo();
+
+    /**
+     * Check if the info is set with empty values.
+     *
+     * @return      	True if the info is empty.
+     */
+    bool isEmpty() const;
+
+    /**
+     * Convert from pjsip
+     */
+    void fromPj(const pjsip_tls_state_info &info);
+
+private:
+    bool empty;
+};
+
+/**
  * Parameter of Endpoint::onTransportState() callback.
  */
 struct OnTransportStateParam
@@ -132,6 +277,11 @@ struct OnTransportStateParam
      * The transport handle.
      */
     TransportHandle	hnd;
+    
+    /**
+     * The transport type.
+     */
+    string		type;
 
     /**
      * Transport current state.
@@ -142,6 +292,12 @@ struct OnTransportStateParam
      * The last error code related to the transport state.
      */
     pj_status_t		lastError;
+    
+    /**
+     * TLS transport info, only used if transport type is TLS. Use 
+     * TlsInfo.isEmpty() to check if this info is available.
+     */
+    TlsInfo		tlsInfo;
 };
 
 /**
@@ -162,6 +318,103 @@ struct OnSelectAccountParam
      */
     int			accountIndex;
 };
+
+/**
+ * Parameter of Endpoint::handleIpChange().
+ */
+struct IpChangeParam {
+    /**
+     * If set to PJ_TRUE, this will restart the transport listener.
+     * 
+     * Default : PJ_TRUE
+     */
+    bool	    restartListener;
+
+    /** 
+     * If \a restartListener is set to PJ_TRUE, some delay might be needed 
+     * for the listener to be restarted. Use this to set the delay.
+     * 
+     * Default : PJSUA_TRANSPORT_RESTART_DELAY_TIME
+     */
+    unsigned	    restartLisDelay;
+public:
+    /**
+     * Constructor.
+     */
+    IpChangeParam();
+
+    /**
+     * Export to pjsua_ip_change_param.
+     */
+    pjsua_ip_change_param toPj() const;
+
+    /**
+     * Convert from pjsip
+     */
+    void fromPj(const pjsua_ip_change_param &param);
+};
+
+/**
+ * Information of Update contact on IP change progress.
+ */
+struct RegProgressParam
+{
+    /**
+     * Indicate if this is a Register or Un-Register message.
+     */
+    bool    isRegister;
+
+    /**
+     * SIP status code received.
+     */
+    int	    code;
+};
+
+/**
+ * Parameter of Endpoint::onIpChangeProgress().
+ */
+struct OnIpChangeProgressParam
+{
+    /**
+     * The IP change progress operation.
+     */
+    pjsua_ip_change_op	op;
+
+    /**
+     * The operation progress status.
+     */
+    pj_status_t		status;
+
+    /**
+     * Information of the transport id. This is only available when the 
+     * operation is PJSUA_IP_CHANGE_OP_RESTART_LIS.
+     */
+    TransportId		transportId;
+
+    /**
+     * Information of the account id. This is only available when the 
+     * operation is:
+     * - PJSUA_IP_CHANGE_OP_ACC_SHUTDOWN_TP 
+     * - PJSUA_IP_CHANGE_OP_ACC_UPDATE_CONTACT 
+     * - PJSUA_IP_CHANGE_OP_ACC_HANGUP_CALLS
+     * - PJSUA_IP_CHANGE_OP_ACC_REINVITE_CALLS
+     */
+    int			accId;
+
+    /**
+     * Information of the call id. This is only available when the operation is
+     * PJSUA_IP_CHANGE_OP_ACC_HANGUP_CALLS or 
+     * PJSUA_IP_CHANGE_OP_ACC_REINVITE_CALLS
+     */
+    int			callId;
+
+    /**
+     * Registration information. This is only available when the operation is
+     * PJSUA_IP_CHANGE_OP_ACC_UPDATE_CONTACT
+     */
+    RegProgressParam	regInfo;
+};
+
 
 //////////////////////////////////////////////////////////////////////////////
 /**
@@ -234,6 +487,15 @@ struct UaConfig : public PersistentObject
      */
     StringVector	stunServer;
 
+    /**
+     * This specifies if the library should try to do an IPv6 resolution of
+     * the STUN servers if the IPv4 resolution fails. It can be useful
+     * in an IPv6-only environment, including on NAT64.
+     *
+     * Default: FALSE
+     */
+
+    bool	    	stunTryIpv6;
     /**
      * This specifies if the library startup should ignore failure with the
      * STUN servers. If this is set to PJ_FALSE, the library will refuse to
@@ -692,7 +954,7 @@ public:
      * Instantiate pjsua application. Application must call this function before
      * calling any other functions, to make sure that the underlying libraries
      * are properly initialized. Once this function has returned success,
-     * application must call destroy() before quitting.
+     * application must call libDestroy() before quitting.
      */
     void libCreate() throw(Error);
 
@@ -904,6 +1166,32 @@ public:
     pj_stun_nat_type natGetType() throw(Error);
 
     /**
+     * Update the STUN servers list. The libInit() must have been called
+     * before calling this function.
+     *
+     * @param prmServers	Array of STUN servers to try. The endpoint
+     * 				will try to resolve and contact each of the
+     * 				STUN server entry until it finds one that is
+     * 				usable. Each entry may be a domain name, host
+     * 				name, IP address, and it may contain an
+     * 				optional port number. For example:
+     *				- "pjsip.org" (domain name)
+     *				- "sip.pjsip.org" (host name)
+     *				- "pjsip.org:33478" (domain name and a non-
+     *				   standard port number)
+     *				- "10.0.0.1:3478" (IP address and port number)
+     * @param prmWait		Specify if the function should block until
+     *				it gets the result. In this case, the
+     *				function will block while the resolution
+     * 				is being done, and the callback
+     * 				onNatCheckStunServersComplete() will be called
+     * 				before this function returns.
+     *
+     */
+    void natUpdateStunServers(const StringVector &prmServers,
+                              bool prmWait) throw(Error);
+
+    /**
      * Auxiliary function to resolve and contact each of the STUN server
      * entries (sequentially) to find which is usable. The libInit() must
      * have been called before calling this function.
@@ -1003,6 +1291,21 @@ public:
      * @param id		Transport ID.
      */
     void transportClose(TransportId id) throw(Error);
+    
+    /**
+     * Start graceful shutdown procedure for this transport handle. After
+     * graceful shutdown has been initiated, no new reference can be
+     * obtained for the transport. However, existing objects that currently
+     * uses the transport may still use this transport to send and receive
+     * packets. After all objects release their reference to this transport,
+     * the transport will be destroyed immediately.
+     *
+     * Note: application normally uses this API after obtaining the handle
+     * from onTransportState() callback.
+     *
+     * @param tp		The transport.
+     */
+    void transportShutdown(TransportHandle tp) throw(Error);
 
     /*************************************************************************
      * Call operations
@@ -1069,6 +1372,13 @@ public:
      */
     AudDevManager &audDevManager();
 
+    /**
+     * Get the instance of Video Device Manager.
+     *
+     * @return		The Video Device Manager.
+     */
+    VidDevManager &vidDevManager();
+
     /*************************************************************************
      * Codec management operations
      */
@@ -1095,10 +1405,10 @@ public:
     /**
      * Get codec parameters.
      *
-     * @param codec_id		Codec ID.
+     * @param codec_id	Codec ID.
      *
-     * @return			Codec parameters. If codec is not found, Error
-     * 				will be thrown.
+     * @return		Codec parameters. If codec is not found, Error
+     * 			will be thrown.
      *
      */
     CodecParam codecGetParam(const string &codec_id) const throw(Error);
@@ -1114,6 +1424,79 @@ public:
     void codecSetParam(const string &codec_id,
 		       const CodecParam param) throw(Error);
 
+    /**
+     * Enum all supported video codecs in the system.
+     *  
+     * @return		Array of video codec info.
+     */
+    const CodecInfoVector &videoCodecEnum() throw(Error);
+
+    /**
+     * Change video codec priority.
+     *
+     * @param codec_id	Codec ID, which is a string that uniquely identify
+     *			the codec (such as "H263/90000"). Please see pjsua
+     *			manual or pjmedia codec reference for details.
+     * @param priority	Codec priority, 0-255, where zero means to disable
+     *			the codec.
+     *
+     */
+    void videoCodecSetPriority(const string &codec_id,
+			       pj_uint8_t priority) throw(Error);
+
+    /**
+     * Get video codec parameters.
+     *
+     * @param codec_id	Codec ID.
+     *
+     * @return		Codec parameters. If codec is not found, Error 
+     *			will be thrown.
+     *
+     */
+    VidCodecParam getVideoCodecParam(const string &codec_id) const throw(Error);
+
+    /**
+     * Set video codec parameters.
+     *
+     * @param codec_id	Codec ID.
+     * @param param	Codec parameter to set.
+     *
+     */
+    void setVideoCodecParam(const string &codec_id,
+			    const VidCodecParam &param) throw(Error);
+			    
+    /**
+     * Reset video codec parameters to library default settings.
+     *
+     * @param codec_id	Codec ID.
+     *
+     */
+    void resetVideoCodecParam(const string &codec_id) throw(Error);
+
+    /*************************************************************************
+     * IP Change
+     */
+
+    /**
+     * Inform the stack that IP address change event was detected.
+     * The stack will:
+     * 1. Restart the listener (this step is configurable via
+     *    \a IpChangeParam.restartListener).
+     * 2. Shutdown the transport used by account registration (this step is
+     *    configurable via \a AccountConfig.ipChangeConfig.shutdownTp).
+     * 3. Update contact URI by sending re-Registration (this step is 
+     *    configurable via a\ AccountConfig.natConfig.contactRewriteUse and
+     *    a\ AccountConfig.natConfig.contactRewriteMethod)
+     * 4. Hangup active calls (this step is configurable via
+     *    a\ AccountConfig.ipChangeConfig.hangupCalls) or
+     *    continue the call by sending re-INVITE
+     *    (configurable via \a AccountConfig.ipChangeConfig.reinviteFlags).
+     *
+     * @param param	The IP change parameter, have a look at #IpChangeParam.
+     *
+     * @return		PJ_SUCCESS on success, other on error.
+     */
+    void handleIpChange(const IpChangeParam &param) throw(Error);
 
 public:
     /*
@@ -1133,7 +1516,8 @@ public:
 
     /**
      * Callback when the Endpoint has finished performing STUN server
-     * checking that is initiated with natCheckStunServers().
+     * checking that is initiated when calling libInit(), or by
+     * calling natCheckStunServers() or natUpdateStunServers().
      *
      * @param prm	Callback parameters.
      */
@@ -1177,12 +1561,24 @@ public:
     virtual void onSelectAccount(OnSelectAccountParam &prm)
     { PJ_UNUSED_ARG(prm); }
 
+    /**
+     * Calling #handleIpChange() may involve different operation. This 
+     * callback is called to report the progress of each enabled operation.
+     *
+     * @param prm	Callback parameters.
+     * 
+     */
+    virtual void onIpChangeProgress(OnIpChangeProgressParam &prm)
+    { PJ_UNUSED_ARG(prm); }
+
 private:
     static Endpoint		*instance_;	// static instance
     LogWriter			*writer;	// Custom writer, if any
     AudioMediaVector 	 	 mediaList;
     AudDevManager		 audioDevMgr;
+    VidDevManager		 videoDevMgr;
     CodecInfoVector		 codecInfoList;
+    CodecInfoVector		 videoCodecInfoList;
     std::map<pj_thread_t*, pj_thread_desc*> threadDescMap;
 
     /* Pending logging */
@@ -1252,8 +1648,12 @@ private:
                            pjsua_acc_id acc_id);
     static void on_mwi_info(pjsua_acc_id acc_id,
                             pjsua_mwi_info *mwi_info);
-
+    static void on_acc_find_for_incoming(const pjsip_rx_data *rdata,
+				     	 pjsua_acc_id* acc_id);
     static void on_buddy_state(pjsua_buddy_id buddy_id);
+    static void on_buddy_evsub_state(pjsua_buddy_id buddy_id,
+				     pjsip_evsub *sub,
+				     pjsip_event *event);
     // Call callbacks
     static void on_call_state(pjsua_call_id call_id, pjsip_event *e);
     static void on_call_tsx_state(pjsua_call_id call_id,
@@ -1264,10 +1664,8 @@ private:
                                     pjmedia_sdp_session *sdp,
                                     pj_pool_t *pool,
                                     const pjmedia_sdp_session *rem_sdp);
-    static void on_stream_created(pjsua_call_id call_id,
-                                  pjmedia_stream *strm,
-                                  unsigned stream_idx,
-                                  pjmedia_port **p_port);
+    static void on_stream_created2(pjsua_call_id call_id,
+				   pjsua_on_stream_created_param *param);
     static void on_stream_destroyed(pjsua_call_id call_id,
                                     pjmedia_stream *strm,
                                     unsigned stream_idx);
@@ -1300,6 +1698,9 @@ private:
                                  void *reserved,
                                  pjsip_status_code *code,
                                  pjsua_call_setting *opt);
+    static void on_call_tx_offer(pjsua_call_id call_id,
+				 void *reserved,
+				 pjsua_call_setting *opt);
     static pjsip_redirect_op on_call_redirected(pjsua_call_id call_id,
                                                 const pjsip_uri *target,
                                                 const pjsip_event *e);
@@ -1314,9 +1715,20 @@ private:
                               unsigned media_idx,
                               pjmedia_transport *base_tp,
                               unsigned flags);
+    static void
+    on_create_media_transport_srtp(pjsua_call_id call_id,
+                                   unsigned media_idx,
+                                   pjmedia_srtp_setting *srtp_opt);
+
+    static void
+    on_ip_change_progress(pjsua_ip_change_op op,
+			  pj_status_t status,
+			  const pjsua_ip_change_op_info *info);
 
 private:
-    void clearCodecInfoList();
+    void clearCodecInfoList(CodecInfoVector &codec_list);
+    void updateCodecInfoList(pjsua_codec_info pj_codec[], unsigned count,
+			     CodecInfoVector &codec_list);
 
 };
 

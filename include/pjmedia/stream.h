@@ -1,4 +1,4 @@
-/* $Id: stream.h 4739 2014-02-11 04:46:49Z riza $ */
+/* $Id: stream.h 5479 2016-11-04 14:57:20Z riza $ */
 /* 
  * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
  * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
@@ -33,6 +33,7 @@
 #include <pjmedia/rtcp.h>
 #include <pjmedia/transport.h>
 #include <pjmedia/vid_codec.h>
+#include <pjmedia/stream_common.h>
 #include <pj/sock.h>
 
 PJ_BEGIN_DECL
@@ -342,7 +343,8 @@ PJ_DECL(pj_status_t) pjmedia_stream_resume(pjmedia_stream *stream,
  *
  * @param stream	The media stream.
  * @param ascii_digit	String containing digits to be sent to remote as 
- *			described on RFC 2833 section 3.10. Character 'R' is 
+ *			described on RFC 2833 section 3.10. 
+ *			If PJMEDIA_HAS_DTMF_FLASH is enabled, character 'R' is
  *			used to represent the event type 16 (flash) as stated 
  *			in RFC 4730.
  *			Currently the maximum number of digits are 32.
@@ -428,6 +430,25 @@ pjmedia_stream_send_rtcp_sdes( pjmedia_stream *stream );
  */
 PJ_DECL(pj_status_t)
 pjmedia_stream_send_rtcp_bye( pjmedia_stream *stream );
+
+
+/**
+ * Get the RTP session information of the media stream. This function can be 
+ * useful for app with custom media transport to inject/filter some 
+ * outgoing/incoming proprietary packets into normal audio RTP traffics.
+ * This will return the original pointer to the internal states of the stream, 
+ * and generally it is not advisable for app to modify them.
+ *
+ * @param stream	The media stream.
+ *
+ * @param session_info	The stream session info.
+ *
+ * @return		PJ_SUCCESS on success.
+ */
+PJ_DECL(pj_status_t)
+pjmedia_stream_get_rtp_session_info(pjmedia_stream *stream,
+			           pjmedia_stream_rtp_sess_info *session_info);
+
 
 /**
  * @}

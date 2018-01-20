@@ -1,4 +1,4 @@
-/* $Id: config.h 4331 2013-01-23 06:18:18Z ming $ */
+/* $Id: config.h 5632 2017-07-27 06:45:48Z ming $ */
 /* 
  * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
  * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
@@ -47,6 +47,38 @@
  */
 #ifndef PJMEDIA_HAS_L16_CODEC
 #   define PJMEDIA_HAS_L16_CODEC    1
+#endif
+
+
+/**
+ * Settings to enable L16 codec 8KHz, mono. By default it is disabled.
+ */
+#ifndef PJMEDIA_CODEC_L16_HAS_8KHZ_MONO
+#   define PJMEDIA_CODEC_L16_HAS_8KHZ_MONO	0
+#endif
+
+
+/**
+ * Settings to enable L16 codec 8KHz, stereo. By default it is disabled.
+ */
+#ifndef PJMEDIA_CODEC_L16_HAS_8KHZ_STEREO
+#   define PJMEDIA_CODEC_L16_HAS_8KHZ_STEREO	0
+#endif
+
+
+/**
+ * Settings to enable L16 codec 16KHz, mono. By default it is disabled.
+ */
+#ifndef PJMEDIA_CODEC_L16_HAS_16KHZ_MONO
+#   define PJMEDIA_CODEC_L16_HAS_16KHZ_MONO	0
+#endif
+
+
+/**
+ * Settings to enable L16 codec 16KHz, stereo. By default it is disabled.
+ */
+#ifndef PJMEDIA_CODEC_L16_HAS_16KHZ_STEREO
+#   define PJMEDIA_CODEC_L16_HAS_16KHZ_STEREO	0
 #endif
 
 
@@ -420,12 +452,73 @@
 
 
 /**
+ * Enable OPUS codec.
+ *
+ * Default: 0
+ */
+#ifndef PJMEDIA_HAS_OPUS_CODEC
+#   define PJMEDIA_HAS_OPUS_CODEC			0
+#endif
+
+/**
+ * OPUS codec sample rate.
+ *
+ * Default: 48000
+ */
+#ifndef PJMEDIA_CODEC_OPUS_DEFAULT_SAMPLE_RATE
+#   define PJMEDIA_CODEC_OPUS_DEFAULT_SAMPLE_RATE  	48000
+#endif
+
+/**
+ * OPUS codec default maximum average bit rate.
+ *
+ * Default: 0 (leave it to default value specified by Opus, which will
+ * take into account factors such as media content (speech/music), sample
+ * rate, channel count, etc).
+ */
+#ifndef PJMEDIA_CODEC_OPUS_DEFAULT_BIT_RATE
+#   define PJMEDIA_CODEC_OPUS_DEFAULT_BIT_RATE  	0
+#endif
+
+
+/**
+ * OPUS default encoding complexity, which is an integer from
+ * 0 to 10, where 0 is the lowest complexity and 10 is the highest.
+ *
+ * Default: 5
+ */
+#ifndef PJMEDIA_CODEC_OPUS_DEFAULT_COMPLEXITY
+#   define PJMEDIA_CODEC_OPUS_DEFAULT_COMPLEXITY 	5
+#endif
+
+
+/**
+ * OPUS default CBR (constant bit rate) setting
+ *
+ * Default: PJ_FALSE (which means Opus will use VBR (variable bit rate))
+ */
+#ifndef PJMEDIA_CODEC_OPUS_DEFAULT_CBR
+#   define PJMEDIA_CODEC_OPUS_DEFAULT_CBR 		PJ_FALSE
+#endif
+
+
+/**
+ * Enable G.729 codec using BCG729 backend.
+ *
+ * Default: 0 
+ */
+#ifndef PJMEDIA_HAS_BCG729
+#   define PJMEDIA_HAS_BCG729				0
+#endif
+
+
+/**
  * Specify if FFMPEG codecs are available.
  *
- * Default: PJMEDIA_HAS_LIBAVCODEC
+ * Default: PJMEDIA_HAS_LIBAVFORMAT
  */
 #ifndef PJMEDIA_HAS_FFMPEG_CODEC
-#   define PJMEDIA_HAS_FFMPEG_CODEC		PJMEDIA_HAS_LIBAVCODEC
+#   define PJMEDIA_HAS_FFMPEG_CODEC		PJMEDIA_HAS_LIBAVFORMAT
 #endif
 
 
@@ -450,10 +543,15 @@
 /**
  * Enable FFMPEG H264 codec (requires libx264).
  *
- * Default: 0
+ * Default: disabled when OpenH264 is used, otherwise it is set to
+ * PJMEDIA_HAS_FFMPEG_VID_CODEC
  */
 #ifndef PJMEDIA_HAS_FFMPEG_CODEC_H264
-#   define PJMEDIA_HAS_FFMPEG_CODEC_H264	PJMEDIA_HAS_FFMPEG_VID_CODEC
+#   if defined(PJMEDIA_HAS_OPENH264_CODEC) && PJMEDIA_HAS_OPENH264_CODEC != 0
+#	define PJMEDIA_HAS_FFMPEG_CODEC_H264	0
+#   else
+#	define PJMEDIA_HAS_FFMPEG_CODEC_H264	PJMEDIA_HAS_FFMPEG_VID_CODEC
+#   endif
 #endif
 
 /**

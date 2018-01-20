@@ -1,4 +1,4 @@
-/* $Id: ssl_sock.h 4862 2014-06-19 09:42:02Z nanang $ */
+/* $Id: ssl_sock.h 5472 2016-10-27 07:58:01Z ming $ */
 /* 
  * Copyright (C) 2009-2011 Teluu Inc. (http://www.teluu.com)
  *
@@ -181,11 +181,17 @@ typedef struct pj_ssl_cert_info {
     } subj_alt_name;		    /**< Subject alternative
 					 name extension		*/
 
+    pj_str_t raw;		    /**< Raw certificate in PEM format, only
+					 available for remote certificate. */
+
 } pj_ssl_cert_info;
 
 
 /**
- * Create credential from files.
+ * Create credential from files. TLS server application can provide multiple
+ * certificates (RSA, ECC, and DSA) by supplying certificate name with "_rsa"
+ * suffix, e.g: "pjsip_rsa.pem", the library will automatically check for
+ * other certificates with "_ecc" and "_dsa" suffix.
  *
  * @param CA_file	The file of trusted CA list.
  * @param cert_file	The file of certificate.
@@ -201,6 +207,34 @@ PJ_DECL(pj_status_t) pj_ssl_cert_load_from_files(pj_pool_t *pool,
 						 const pj_str_t *privkey_file,
 						 const pj_str_t *privkey_pass,
 						 pj_ssl_cert_t **p_cert);
+
+/**
+ * Create credential from files. TLS server application can provide multiple
+ * certificates (RSA, ECC, and DSA) by supplying certificate name with "_rsa"
+ * suffix, e.g: "pjsip_rsa.pem", the library will automatically check for
+ * other certificates with "_ecc" and "_dsa" suffix.
+ *
+ * This is the same as pj_ssl_cert_load_from_files() but also
+ * accepts an additional param CA_path to load CA certificates from
+ * a directory.
+ *
+ * @param CA_file	The file of trusted CA list.
+ * @param CA_path	The path to a directory of trusted CA list.
+ * @param cert_file	The file of certificate.
+ * @param privkey_file	The file of private key.
+ * @param privkey_pass	The password of private key, if any.
+ * @param p_cert	Pointer to credential instance to be created.
+ *
+ * @return		PJ_SUCCESS when successful.
+ */
+PJ_DECL(pj_status_t) pj_ssl_cert_load_from_files2(
+						pj_pool_t *pool,
+						const pj_str_t *CA_file,
+						const pj_str_t *CA_path,
+						const pj_str_t *cert_file,
+						const pj_str_t *privkey_file,
+						const pj_str_t *privkey_pass,
+						pj_ssl_cert_t **p_cert);
 
 
 /**
@@ -367,6 +401,99 @@ PJ_DECL(const char*) pj_ssl_cipher_name(pj_ssl_cipher cipher);
  */
 PJ_DECL(pj_ssl_cipher) pj_ssl_cipher_id(const char *cipher_name);
 
+/**
+ * Elliptic curves enumeration.
+ */
+typedef enum pj_ssl_curve
+{
+	PJ_TLS_UNKNOWN_CURVE 		= 0,
+	PJ_TLS_CURVE_SECT163K1		= 1,
+	PJ_TLS_CURVE_SECT163R1		= 2,
+	PJ_TLS_CURVE_SECT163R2		= 3,
+	PJ_TLS_CURVE_SECT193R1		= 4,
+	PJ_TLS_CURVE_SECT193R2		= 5,
+	PJ_TLS_CURVE_SECT233K1		= 6,
+	PJ_TLS_CURVE_SECT233R1		= 7,
+	PJ_TLS_CURVE_SECT239K1		= 8,
+	PJ_TLS_CURVE_SECT283K1		= 9,
+	PJ_TLS_CURVE_SECT283R1		= 10,
+	PJ_TLS_CURVE_SECT409K1		= 11,
+	PJ_TLS_CURVE_SECT409R1		= 12,
+	PJ_TLS_CURVE_SECT571K1		= 13,
+	PJ_TLS_CURVE_SECT571R1		= 14,
+	PJ_TLS_CURVE_SECP160K1		= 15,
+	PJ_TLS_CURVE_SECP160R1		= 16,
+	PJ_TLS_CURVE_SECP160R2		= 17,
+	PJ_TLS_CURVE_SECP192K1		= 18,
+	PJ_TLS_CURVE_SECP192R1		= 19,
+	PJ_TLS_CURVE_SECP224K1		= 20,
+	PJ_TLS_CURVE_SECP224R1		= 21,
+	PJ_TLS_CURVE_SECP256K1		= 22,
+	PJ_TLS_CURVE_SECP256R1		= 23,
+	PJ_TLS_CURVE_SECP384R1		= 24,
+	PJ_TLS_CURVE_SECP521R1		= 25,
+	PJ_TLS_CURVE_BRAINPOOLP256R1	= 26,
+	PJ_TLS_CURVE_BRAINPOOLP384R1	= 27,
+	PJ_TLS_CURVE_BRAINPOOLP512R1	= 28,
+	PJ_TLS_CURVE_ARBITRARY_EXPLICIT_PRIME_CURVES	= 0XFF01,
+	PJ_TLS_CURVE_ARBITRARY_EXPLICIT_CHAR2_CURVES	= 0XFF02
+} pj_ssl_curve;
+
+/**
+ * Get curve list supported by SSL/TLS backend.
+ *
+ * @param curves	The curves buffer to receive curve list.
+ * @param curves_num	Maximum number of curves to be received.
+ *
+ * @return		PJ_SUCCESS when successful.
+ */
+PJ_DECL(pj_status_t) pj_ssl_curve_get_availables(pj_ssl_curve curves[],
+					         unsigned *curve_num);
+
+/**
+ * Check if the specified curve is supported by SSL/TLS backend.
+ *
+ * @param curve		The curve.
+ *
+ * @return		PJ_TRUE when supported.
+ */
+PJ_DECL(pj_bool_t) pj_ssl_curve_is_supported(pj_ssl_curve curve);
+
+
+/**
+ * Get curve name string.
+ *
+ * @param curve		The curve.
+ *
+ * @return		The curve name or NULL if curve is not recognized/
+ *			supported.
+ */
+PJ_DECL(const char*) pj_ssl_curve_name(pj_ssl_curve curve);
+
+/**
+ * Get curve ID from curve name string. Note that on different backends
+ * (e.g. OpenSSL or Symbian implementation), curve names may not be
+ * equivalent for the same curve ID.
+ *
+ * @param curve_name	The curve name string.
+ *
+ * @return		The curve ID or PJ_TLS_UNKNOWN_CURVE if the curve
+ *			name string is not recognized/supported.
+ */
+PJ_DECL(pj_ssl_curve) pj_ssl_curve_id(const char *curve_name);
+
+/*
+ * Entropy enumeration
+ */
+typedef enum pj_ssl_entropy
+{
+	PJ_SSL_ENTROPY_NONE	= 0,
+	PJ_SSL_ENTROPY_EGD	= 1,
+	PJ_SSL_ENTROPY_RANDOM	= 2,
+	PJ_SSL_ENTROPY_URANDOM	= 3,
+	PJ_SSL_ENTROPY_FILE	= 4,
+	PJ_SSL_ENTROPY_UNKNOWN	= 0x0F
+} pj_ssl_entropy_t;
 
 /**
  * This structure contains the callbacks to be called by the secure socket.
@@ -487,16 +614,51 @@ typedef struct pj_ssl_sock_cb
 
 /** 
  * Enumeration of secure socket protocol types.
+ * This can be combined using bitwise OR operation.
  */
 typedef enum pj_ssl_sock_proto
 {
-    PJ_SSL_SOCK_PROTO_DEFAULT,	    /**< Default protocol of backend.	*/
-    PJ_SSL_SOCK_PROTO_TLS1,	    /**< TLSv1.0 protocol.		*/
-    PJ_SSL_SOCK_PROTO_SSL3,	    /**< SSLv3.0 protocol.		*/
-    PJ_SSL_SOCK_PROTO_SSL23,	    /**< SSLv3.0 but can roll back to 
-					 SSLv2.0.			*/
-    PJ_SSL_SOCK_PROTO_SSL2,	    /**< SSLv2.0 protocol.		*/
-    PJ_SSL_SOCK_PROTO_DTLS1	    /**< DTLSv1.0 protocol.		*/
+    /**
+     * Default protocol of backend. 
+     */   
+    PJ_SSL_SOCK_PROTO_DEFAULT = 0,
+
+    /** 
+     * SSLv2.0 protocol.	  
+     */
+    PJ_SSL_SOCK_PROTO_SSL2    = (1 << 0),
+
+    /** 
+     * SSLv3.0 protocol.	  
+     */
+    PJ_SSL_SOCK_PROTO_SSL3    = (1 << 1),
+
+    /**
+     * TLSv1.0 protocol.	  
+     */
+    PJ_SSL_SOCK_PROTO_TLS1    = (1 << 2),
+
+    /** 
+     * TLSv1.1 protocol.
+     */
+    PJ_SSL_SOCK_PROTO_TLS1_1  = (1 << 3),
+
+    /**
+     * TLSv1.2 protocol.
+     */
+    PJ_SSL_SOCK_PROTO_TLS1_2  = (1 << 4),
+
+    /** 
+     * Certain backend implementation e.g:OpenSSL, has feature to enable all
+     * protocol. 
+     */
+    PJ_SSL_SOCK_PROTO_SSL23   = (1 << 16) - 1,
+
+    /**
+     * DTLSv1.0 protocol.	  
+     */
+    PJ_SSL_SOCK_PROTO_DTLS1   = (1 << 16),
+
 } pj_ssl_sock_proto;
 
 
@@ -512,9 +674,10 @@ typedef struct pj_ssl_sock_info
     pj_bool_t established;
 
     /**
-     * Describes secure socket protocol being used.
+     * Describes secure socket protocol being used, see #pj_ssl_sock_proto. 
+     * Use bitwise OR operation to combine the protocol type.
      */
-    pj_ssl_sock_proto proto;
+    pj_uint32_t proto;
 
     /**
      * Describes cipher suite being used, this will only be set when connection
@@ -614,11 +777,12 @@ typedef struct pj_ssl_sock_param
     void *user_data;
 
     /**
-     * Specify security protocol to use, see #pj_ssl_sock_proto.
+     * Specify security protocol to use, see #pj_ssl_sock_proto. Use bitwise OR 
+     * operation to combine the protocol type.
      *
      * Default is PJ_SSL_SOCK_PROTO_DEFAULT.
      */
-    pj_ssl_sock_proto proto;
+    pj_uint32_t proto;
 
     /**
      * Number of concurrent asynchronous operations that is to be supported
@@ -686,8 +850,9 @@ typedef struct pj_ssl_sock_param
 
     /**
      * Number of ciphers contained in the specified cipher preference. 
-     * If this is set to zero, then default cipher list of the backend 
-     * will be used.
+     * If this is set to zero, then the cipher list used will be determined
+     * by the backend default (for OpenSSL backend, setting 
+     * PJ_SSL_SOCK_OSSL_CIPHERS will be used).
      */
     unsigned ciphers_num;
 
@@ -696,6 +861,51 @@ typedef struct pj_ssl_sock_param
      * its default order of the backend will be used.
      */
     pj_ssl_cipher *ciphers;
+
+    /**
+     * Number of curves contained in the specified curve preference.
+     * If this is set to zero, then default curve list of the backend
+     * will be used.
+     *
+     * Default: 0 (zero).
+     */
+    unsigned curves_num;
+
+    /**
+     * Curves and order preference. The #pj_ssl_curve_get_availables()
+     * can be used to check the available curves supported by backend.
+     */
+    pj_ssl_curve *curves;
+
+    /**
+     * The supported signature algorithms. Set the sigalgs string
+     * using this form:
+     * "<DIGEST>+<ALGORITHM>:<DIGEST>+<ALGORITHM>"
+     * Digests are: "RSA", "DSA" or "ECDSA"
+     * Algorithms are: "MD5", "SHA1", "SHA224", "SHA256", "SHA384", "SHA512"
+     * Example: "ECDSA+SHA256:RSA+SHA256"
+     */
+    pj_str_t	sigalgs;
+
+    /**
+     * Reseed random number generator.
+     * For type #PJ_SSL_ENTROPY_FILE, parameter \a entropy_path
+     * must be set to a file.
+     * For type #PJ_SSL_ENTROPY_EGD, parameter \a entropy_path
+     * must be set to a socket.
+     *
+     * Default value is PJ_SSL_ENTROPY_NONE.
+    */
+    pj_ssl_entropy_t	entropy_type;
+
+    /**
+     * When using a file/socket for entropy #PJ_SSL_ENTROPY_EGD or
+     * #PJ_SSL_ENTROPY_FILE, \a entropy_path must contain the path
+     * to entropy socket/file.
+     *
+     * Default value is an empty string.
+     */
+    pj_str_t		entropy_path;
 
     /**
      * Security negotiation timeout. If this is set to zero (both sec and 
@@ -792,6 +1002,18 @@ typedef struct pj_ssl_sock_param
  * @param param		The parameter to be initialized.
  */
 PJ_DECL(void) pj_ssl_sock_param_default(pj_ssl_sock_param *param);
+
+
+/**
+ * Duplicate pj_ssl_sock_param.
+ *
+ * @param pool	Pool to allocate memory.
+ * @param dst	Destination parameter.
+ * @param src	Source parameter.
+ */
+PJ_DECL(void) pj_ssl_sock_param_copy(pj_pool_t *pool, 
+				     pj_ssl_sock_param *dst,
+				     const pj_ssl_sock_param *src);
 
 
 /**
@@ -1043,6 +1265,30 @@ PJ_DECL(pj_status_t) pj_ssl_sock_start_accept(pj_ssl_sock_t *ssock,
 					      pj_pool_t *pool,
 					      const pj_sockaddr_t *local_addr,
 					      int addr_len);
+
+
+/**
+ * Same as #pj_ssl_sock_start_accept(), but application can provide
+ * a secure socket parameter, which will be used to create a new secure
+ * socket reported in \a on_accept_complete() callback when there is
+ * an incoming connection.
+ *
+ * @param ssock		The secure socket.
+ * @param pool		Pool used to allocate some internal data for the
+ *			operation.
+ * @param localaddr	Local address to bind on.
+ * @param addr_len	Length of buffer containing local address.
+ * @param newsock_param	Secure socket parameter for new accepted sockets.
+ *
+ * @return		PJ_SUCCESS if the operation has been successful,
+ *			or the appropriate error code on failure.
+ */
+PJ_DECL(pj_status_t)
+pj_ssl_sock_start_accept2(pj_ssl_sock_t *ssock,
+			  pj_pool_t *pool,
+			  const pj_sockaddr_t *local_addr,
+			  int addr_len,
+			  const pj_ssl_sock_param *newsock_param);
 
 
 /**

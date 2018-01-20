@@ -1,4 +1,4 @@
-/* $Id: config.h 4875 2014-07-14 02:37:06Z riza $ */
+/* $Id: config.h 5643 2017-08-22 04:59:57Z riza $ */
 /* 
  * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
  * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
@@ -636,6 +636,45 @@
 
 
 /**
+ * Specify whether Automatic Gain Control (AGC) should also be enabled in
+ * Speex AEC.
+ *
+ * Default: 1 (yes)
+ */
+#ifndef PJMEDIA_SPEEX_AEC_USE_AGC
+#   define PJMEDIA_SPEEX_AEC_USE_AGC		1
+#endif
+
+
+/**
+ * Specify whether denoise should also be enabled in Speex AEC.
+ *
+ * Default: 1 (yes)
+ */
+#ifndef PJMEDIA_SPEEX_AEC_USE_DENOISE
+#   define PJMEDIA_SPEEX_AEC_USE_DENOISE	1
+#endif
+
+
+/**
+ * WebRtc Accoustic Echo Cancellation (AEC).
+ * By default is disabled.
+ */
+#ifndef PJMEDIA_HAS_WEBRTC_AEC
+#   define PJMEDIA_HAS_WEBRTC_AEC		0
+#endif
+
+/**
+ * Specify whether WebRtc EC should use its mobile version AEC.
+ *
+ * Default: 0 (no)
+ */
+#ifndef PJMEDIA_WEBRTC_AEC_USE_MOBILE
+#   define PJMEDIA_WEBRTC_AEC_USE_MOBILE 	0
+#endif
+
+
+/**
  * Maximum number of parameters in SDP fmtp attribute.
  *
  * Default: 16
@@ -700,6 +739,20 @@
  */
 #ifndef PJMEDIA_SDP_NEG_ANSWER_SYMMETRIC_PT
 #   define PJMEDIA_SDP_NEG_ANSWER_SYMMETRIC_PT		1
+#endif
+
+
+/**
+ * This specifies if the SDP negotiator should compare its content before 
+ * incrementing the origin version on the subsequent offer/answer. 
+ * If this is set to 1, origin version will only by incremented if the 
+ * new offer/answer is different than the previous one. For backward 
+ * compatibility and performance this is set to 0.
+ *
+ * Default is 0 (No)
+ */
+#ifndef PJMEDIA_SDP_NEG_COMPARE_BEFORE_INC_VERSION
+#   define PJMEDIA_SDP_NEG_COMPARE_BEFORE_INC_VERSION	0
 #endif
 
 
@@ -914,6 +967,105 @@
 
 
 /**
+ * Enable session description for SRTP keying.
+ *
+ * By default it is enabled.
+ */
+#ifndef PJMEDIA_SRTP_HAS_SDES
+#   define PJMEDIA_SRTP_HAS_SDES		    1
+#endif
+
+
+/**
+ * Enable DTLS for SRTP keying.
+ *
+ * Default value: 0 (disabled)
+ */
+#ifndef PJMEDIA_SRTP_HAS_DTLS
+#   define PJMEDIA_SRTP_HAS_DTLS		    0
+#endif
+
+
+/**
+ * Set OpenSSL ciphers for DTLS-SRTP.
+ *
+ * Default value: "DEFAULT"
+ */
+#ifndef PJMEDIA_SRTP_DTLS_OSSL_CIPHERS
+#   define PJMEDIA_SRTP_DTLS_OSSL_CIPHERS	    "DEFAULT"
+#endif
+
+
+/**
+ * Maximum number of SRTP cryptos.
+ *
+ * Default: 16
+ */
+#ifndef PJMEDIA_SRTP_MAX_CRYPTOS
+#   define PJMEDIA_SRTP_MAX_CRYPTOS		    16
+#endif
+
+
+/**
+ * Enable AES_CM_256 cryptos in SRTP.
+ * Default: enabled.
+ */
+#ifndef PJMEDIA_SRTP_HAS_AES_CM_256
+#   define PJMEDIA_SRTP_HAS_AES_CM_256	    	    1
+#endif
+
+
+/**
+ * Enable AES_CM_192 cryptos in SRTP.
+ * It was reported that this crypto only works among libsrtp backends,
+ * so we recommend to disable this.
+ *
+ * To enable this, you would require OpenSSL which supports it.
+ * See https://trac.pjsip.org/repos/ticket/1943 for more info.
+ *
+ * Default: disabled.
+ */
+#ifndef PJMEDIA_SRTP_HAS_AES_CM_192
+#   define PJMEDIA_SRTP_HAS_AES_CM_192	    	    0
+#endif
+
+
+/**
+ * Enable AES_CM_128 cryptos in SRTP.
+ * Default: enabled.
+ */
+#ifndef PJMEDIA_SRTP_HAS_AES_CM_128
+#   define PJMEDIA_SRTP_HAS_AES_CM_128    	    1
+#endif
+
+
+/**
+ * Enable AES_GCM_256 cryptos in SRTP.
+ *
+ * To enable this, you would require OpenSSL which supports it.
+ * See https://trac.pjsip.org/repos/ticket/1943 for more info. 
+ *
+ * Default: disabled.
+ */
+#ifndef PJMEDIA_SRTP_HAS_AES_GCM_256
+#   define PJMEDIA_SRTP_HAS_AES_GCM_256	    	    0
+#endif
+
+
+/**
+ * Enable AES_GCM_128 cryptos in SRTP.
+ *
+ * To enable this, you would require OpenSSL which supports it.
+ * See https://trac.pjsip.org/repos/ticket/1943 for more info.
+ *
+ * Default: disabled.
+ */
+#ifndef PJMEDIA_SRTP_HAS_AES_GCM_128
+#   define PJMEDIA_SRTP_HAS_AES_GCM_128    	    0
+#endif
+
+
+/**
  * Let the library handle libsrtp initialization and deinitialization.
  * Application may want to disable this and manually perform libsrtp
  * initialization and deinitialization when it needs to use libsrtp
@@ -933,6 +1085,7 @@
  * See:
  *  - G.722      : RFC 3551 4.5.2
  *  - MPEG audio : RFC 3551 4.5.13 & RFC 3119
+ *  - OPUS	 : RFC 7587
  *
  * Also when this feature is enabled, some handling will be performed
  * to deal with clock rate incompatibilities of some phones.
@@ -1041,7 +1194,7 @@
  * Default: 0 (disabled)
  */
 #ifndef PJMEDIA_HAS_VIDEO
-#   define PJMEDIA_HAS_VIDEO				1
+#   define PJMEDIA_HAS_VIDEO				0
 #endif
 
 
@@ -1052,7 +1205,7 @@
  * Default: 0
  */
 #ifndef PJMEDIA_HAS_FFMPEG
-#   define PJMEDIA_HAS_FFMPEG				1
+#   define PJMEDIA_HAS_FFMPEG				0
 #endif
 
 /**
@@ -1098,15 +1251,6 @@
  */
 #ifndef PJMEDIA_HAS_LIBAVDEVICE
 #   define PJMEDIA_HAS_LIBAVDEVICE			PJMEDIA_HAS_FFMPEG
-#endif
-
-/**
- * Specify if FFMPEG libavcore is available.
- *
- * Default: PJMEDIA_HAS_FFMPEG (or detected by configure)
- */
-#ifndef PJMEDIA_HAS_LIBAVCORE
-#   define PJMEDIA_HAS_LIBAVCORE			PJMEDIA_HAS_FFMPEG
 #endif
 
 /**
@@ -1235,10 +1379,17 @@
  * Maximum video payload size. Note that this must not be greater than
  * PJMEDIA_MAX_MTU.
  *
- * Default: (PJMEDIA_MAX_MTU - 100)
+ * Default: (PJMEDIA_MAX_MTU - 20 - (128+16)) if SRTP is enabled, 
+ *	    otherwise (PJMEDIA_MAX_MTU - 20). 
+ *          Note that (128+16) constant value is taken from libSRTP macro 
+ *          SRTP_MAX_TRAILER_LEN.
  */
-#ifndef PJMEDIA_MAX_VID_PAYLOAD_SIZE			
-#  define PJMEDIA_MAX_VID_PAYLOAD_SIZE		(PJMEDIA_MAX_MTU - 100)
+#ifndef PJMEDIA_MAX_VID_PAYLOAD_SIZE
+#  if PJMEDIA_HAS_SRTP
+#     define PJMEDIA_MAX_VID_PAYLOAD_SIZE     (PJMEDIA_MAX_MTU - 20 - (128+16))
+#  else
+#     define PJMEDIA_MAX_VID_PAYLOAD_SIZE     (PJMEDIA_MAX_MTU - 20)
+#  endif
 #endif
 
 
@@ -1281,6 +1432,7 @@
 #   endif
 #endif
 
+
 /**
  * Specify if libyuv is available.
  *
@@ -1289,6 +1441,34 @@
 #ifndef PJMEDIA_HAS_LIBYUV
 #   define PJMEDIA_HAS_LIBYUV				0
 #endif
+
+
+/**
+ * Specify if dtmf flash in RFC 2833 is available.
+ */
+#ifndef PJMEDIA_HAS_DTMF_FLASH
+#   define PJMEDIA_HAS_DTMF_FLASH			1
+#endif
+
+/**
+ * Specify the number of keyframe needed to be sent after the stream is 
+ * created. Setting this to 0 will disable it.
+ *
+ * Default : 5
+ */
+#ifndef PJMEDIA_VID_STREAM_START_KEYFRAME_CNT
+#   define PJMEDIA_VID_STREAM_START_KEYFRAME_CNT	5
+#endif
+
+/**
+ * Specify the interval to send keyframe after the stream is created, in msec.
+ *
+ * Default : 1000
+ */
+#ifndef PJMEDIA_VID_STREAM_START_KEYFRAME_INTERVAL_MSEC
+#   define PJMEDIA_VID_STREAM_START_KEYFRAME_INTERVAL_MSEC  1000
+#endif
+
 
 /**
  * @}
